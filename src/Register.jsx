@@ -1,9 +1,20 @@
 import React, { useState } from "react";
+import Axios from "axios";
 
 export const Register = (props) => {
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('');
     const [name, setName] = useState('');
+
+    const register = () => {
+      Axios.post("http://localhost:3005/register", {
+        name: name,
+        email: email,
+        pass: pass
+      }).then((response) => {
+        console.log(response);
+      });
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -14,8 +25,15 @@ export const Register = (props) => {
         <div className ="auth-form-container">
             <h2>Register</h2>
         <form className ="register-form" onSubmit={handleSubmit}>
-            <label htmlFor='name'>Full name</label>
-            <input value={name} name="name" id="name" placeholder="Full Name" />
+          <label htmlFor='name'>Full name</label>
+          <input 
+            value={name} 
+            onChange={(e) => setName(e.target.value)}
+            type="name"
+            placeholder="Full Name"
+            id="name"
+            name="name"
+          />
           <label htmlFor='email'>email</label>
           <input
             value={email}
@@ -34,7 +52,7 @@ export const Register = (props) => {
             id="password"
             name="password"
           />
-          <button type="submit">Log In</button>
+          <button type="submit" onClick={register}>Register</button>
         </form>
         <button className="link-btn" onClick={() => props.onFormSwitch('login')}> Already have an Account? Login here.</button>
       </div>

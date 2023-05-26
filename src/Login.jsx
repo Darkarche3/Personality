@@ -1,7 +1,23 @@
 import React, { useState } from "react";
+import Axios from "axios";
+
 export const Login = (props) => {
   const [email, setEmail] = useState('');
   const [pass, setPass] = useState('');
+  const [loginStatus, setLoginStatus] = useState('');
+
+  const login = () => {
+    Axios.post("http://localhost:3005/login", {
+      email: email,
+      pass: pass
+    }).then((response) => {
+      if (response.data.message) {
+        setLoginStatus(response.data.message);
+      } else {
+        setLoginStatus(response.data[0].email)
+      }
+    });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -9,9 +25,9 @@ export const Login = (props) => {
   };
 
   return (
-    <div className ="auth-form-container">
+    <div className="auth-form-container">
         <h2>Login</h2>
-      <form className ="login-form" onSubmit={handleSubmit}>
+      <form className="login-form" onSubmit={handleSubmit}>
         <label htmlFor="email">email</label>
         <input
           value={email}
@@ -30,9 +46,10 @@ export const Login = (props) => {
           id="password"
           name="password"
         />
-        <button type="submit">Log In</button>
+        <button onClick={login} type="submit">Log In</button>
       </form>
       <button className="link-btn" onClick={() => props.onFormSwitch('register')}> Don't have an Account? Register here.</button>
+      <h1>loginStatus</h1>
     </div>
   );
 };
