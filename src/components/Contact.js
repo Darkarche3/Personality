@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import "./styles/Contact.css";
 import { Navbar } from "./Navbar";
-import { db } from "./Firebase";
+import { db } from "../Firebase";
 import { ref, push, set } from "firebase/database";
 import { User } from "./User";
 
