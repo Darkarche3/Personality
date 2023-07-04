@@ -35,7 +35,7 @@ export const Navbar = () => {
                         <Link to="/forum">Forum</Link>
                     </li>
                     <li>
-                        <Link to="/replies">Replies</Link>
+                        <Link to="https://personalitydashboard.netlify.app/">Admin</Link>
                     </li>
                 </ul>
             </nav>
