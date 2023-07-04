@@ -37,6 +37,12 @@ export const Navbar = () => {
                     <li>
                         <Link to="/marketplace">Marketplace</Link>
                     </li>
+                    <li>
+                        <Link to="/forum">Forum</Link>
+                    </li>
+                    <li>
+                        <Link to="/replies">Replies</Link>
+                    </li>
                 </ul>
             </nav>
             <div className="nav-bar__buttons">
@@ -55,3 +61,4 @@ export const Navbar = () => {
         </div>
     );
 };
+export default Navbar;
