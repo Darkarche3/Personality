@@ -3,17 +3,11 @@ import { Link } from 'react-router-dom';
 import { LoginButton } from './buttons/LoginButton';
 import { SignoutButton } from './buttons/SignoutButton';
 import { SignupButton } from './buttons/SignupButton';
+import { User } from './User';
 import './styles/Navbar.css';
 
 // The navigation page
 export const Navbar = () => {
-    var currentUser = null;
-
-    if (localStorage.getItem("keepLoggedIn") == "yes") {
-        currentUser = JSON.parse(localStorage.getItem('user'));
-    } else {
-        currentUser = JSON.parse(sessionStorage.getItem('user'));
-    }
 
     return (
         <div className='sum'>
@@ -46,14 +40,15 @@ export const Navbar = () => {
                 </ul>
             </nav>
             <div className="nav-bar__buttons">
-                {currentUser == null && (
+                {User() == null && (
                     <>
                         <SignupButton />
                         <LoginButton />
                     </>
                 )}
-                {currentUser != null && (
+                {User() != null && (
                     <>
+                        <Link to="/profile">{User().username}</Link>
                         <SignoutButton />
                     </>
                 )}

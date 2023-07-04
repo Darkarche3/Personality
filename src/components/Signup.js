@@ -129,7 +129,7 @@ export const Signup = () => {
                   value={username} onChange={(e) => handleInputChange(e)} />
                 <label htmlFor="password">Password</label>
                 <input type="password" placeholder="Password" id="password" 
-                  value={password} onChange={(e) => handleInputChange(e)} />
+                value={password} onChange={(e) => handleInputChange(e)} />
                 <label htmlFor="confirmPassword">Confirm Password</label>
                 <input type="password" placeholder="Confirm Password" id="confirmPassword" 
                   value={confirmPassword} onChange={(e) => handleInputChange(e)} />
