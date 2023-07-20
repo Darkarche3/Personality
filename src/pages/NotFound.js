@@ -1,7 +1,7 @@
 import React from "react";
-import { Navbar } from "./Navbar";
+import { Navbar } from "../components/Navbar";
 
-export const Profile = () => {
+export const NotFound = () => {
   return (
     <div className="page-layout">
       <Navbar />

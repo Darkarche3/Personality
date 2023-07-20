@@ -2,22 +2,21 @@ import React from 'react';
 import './App.css';
 import { Route, Routes } from "react-router-dom";
 import { PageLoader } from './components/PageLoader';
-import { Admin } from './components/Admin';
-import { Callback } from './components/Callback';
-import { Home } from './components/Home';
-import { NotFound } from './components/NotFound';
-import { Profile } from './components/Profile';
-import { Careers } from './components/Careers';
-import { About } from './components/About';
-import { Contact } from './components/Contact';
-import { Faq } from './components/Faq';
-import { Marketplace } from './components/Marketplace';
-import { Signup } from './components/Signup';
-import { Login } from './components/Login';
-import  ForumPage  from './components/ForumPage';
-import Replies from './components/Replies';
-
-
+import { Admin } from './pages/Admin';
+import { Home } from './pages/Home';
+import { NotFound } from './pages/NotFound';
+import { Profile } from './pages/Profile';
+import { Careers } from './pages/Careers';
+import { About } from './pages/About';
+import { Contact } from './pages/Contact';
+import { Faq } from './pages/Faq';
+import { Marketplace } from './pages/Marketplace';
+import { Signup } from './pages/Signup';
+import { Login } from './pages/Login';
+import { ForumList } from './pages/ForumList';
+import { ForumPost } from './pages/ForumPost';
+import { CreatePost } from './pages/CreatePost';
+import { EditForum } from './components/EditForum';
 
 export const App = () => {
   return (
@@ -25,18 +24,18 @@ export const App = () => {
       <Route path="/" element={<Home />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/admin" element={<Admin />} />
-      <Route path="/callback" element={<Callback />} />
       <Route path="*" element={<NotFound />} />
       <Route path="/careers" element={<Careers />} />
       <Route path="/about" element={<About />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/faq" element={<Faq />} />
       <Route path="/marketplace" element={<Marketplace />} />
-      <Route path="/forum" element={<ForumPage />} />
-      <Route path="/replies" element={<Replies />} />
+      <Route path="/forum" element={<ForumList />} />
+      <Route path="/create" element={<CreatePost />} />
+      <Route path="/post/:id" element={<ForumPost />} />
+      <Route path="/edit/:postkey/:commentid" element={<EditForum />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/login" element={<Login />} />
-      
     </Routes>
   );
 };

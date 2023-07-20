@@ -1,6 +1,6 @@
 import React from 'react';
-import { Navbar } from './Navbar';
-import './styles/Marketplace.css';
+import { Navbar } from "../components/Navbar";
+import '../styles/Marketplace.css';
 
 export const Marketplace = () => {
     return (

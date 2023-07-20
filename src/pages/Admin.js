@@ -1,7 +1,7 @@
 import React from "react";
-import { Navbar } from "./Navbar";
+import { Navbar } from "../components/Navbar";
 
-export const NotFound = () => {
+export const Admin = () => {
   return (
     <div className="page-layout">
       <Navbar />

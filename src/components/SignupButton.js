@@ -2,7 +2,7 @@ import React from "react";
 
 export const SignupButton = () => {
   const click = () => {
-    window.location.href = "../signup";
+    window.location.href = "/signup";
   }
   
   return (

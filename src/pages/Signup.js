@@ -1,10 +1,10 @@
 import React from 'react';
 import { useState } from 'react';
-import { Navbar } from "./Navbar";
+import { Navbar } from "../components/Navbar";
 import { db } from "../Firebase";
 import { ref, set, child, get } from "firebase/database";
 import { AES } from "crypto-js";
-import "./styles/Signup.css";
+import "../styles/Signup.css";
 
 // Signup page
 export const Signup = () => {

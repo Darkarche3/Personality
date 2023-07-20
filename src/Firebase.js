@@ -1,7 +1,9 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getDatabase } from "firebase/database";
-import {getAuth} from "firebase/auth"
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
+import { getAuth } from "firebase/auth";
 
 // The web app's Firebase configuration.
 const firebaseConfig = {
@@ -19,6 +21,13 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
-// Firebase database
+// Firebase Realtime Database
 export const db = getDatabase(app);
+
+// Firebase Firestore Database
+export const fs = getFirestore(app);
+
 export const auth = getAuth();
+
+// Initialize Cloud Storage and get a reference to the service
+export const storage = getStorage(app);

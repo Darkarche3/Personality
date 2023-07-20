@@ -1,7 +1,8 @@
 import React from "react";
-import { Navbar } from "./Navbar";
+import { Navbar } from "../components/Navbar";
+import { User } from "../scripts/FirebaseUtilities";
 
-export const Admin = () => {
+export const Profile = () => {
   return (
     <div className="page-layout">
       <Navbar />

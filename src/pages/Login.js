@@ -1,10 +1,10 @@
 import React from 'react';
 import { useState } from 'react';
-import { Navbar } from "./Navbar";
+import { Navbar } from "../components/Navbar";
 import { db } from "../Firebase";
-import { ref, set, child, get } from "firebase/database";
+import { ref, child, get } from "firebase/database";
 import { AES, enc } from "crypto-js";
-import "./styles/Login.css";
+import "../styles/Login.css";
 
 // Login page
 export const Login = () => {
@@ -39,7 +39,7 @@ export const Login = () => {
         get(child(dbRef, "UsersList/" + username)).then((snapshot) => {
             if (snapshot.exists()) {
                 let dbPass = decryptPassword(snapshot.val().password);
-                if (dbPass == password) {
+                if (dbPass === password) {
                     login(snapshot.val());
                 } else {
                     alert("Username or password is invalid.")

@@ -1,7 +1,7 @@
 import React from 'react';
-import { Navbar } from './Navbar';
+import { Navbar } from "../components/Navbar";
 import { Collapse } from 'antd';
-import "./styles/Faq.css";
+import "../styles/Faq.css";
 
 const { Panel } = Collapse;
 

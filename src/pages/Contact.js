@@ -1,10 +1,10 @@
 import React from "react";
 import { useState } from "react";
-import "./styles/Contact.css";
-import { Navbar } from "./Navbar";
-import { db } from "./Firebase";
+import "../styles/Contact.css";
+import { Navbar } from "../components/Navbar";
+import { db } from "../Firebase";
 import { ref, push, set } from "firebase/database";
-import { User } from "./User";
+import { User } from "../scripts/FirebaseUtilities";
 
 // Contact Us Page
 export const Contact = () => {
@@ -36,17 +36,18 @@ export const Contact = () => {
     let nameregex = /^[a-zA-z\s]+$/;
     let emailregex = /^[a-zA-z0-9]+@(gmail|yahoo|outlook)\.com$/;
 
-    if (isEmptyOrSpaces(name) || isEmptyOrSpaces(email) || isEmptyOrSpaces(message)) {
+    if ((User() == null && isEmptyOrSpaces(name)) || (User() == null && isEmptyOrSpaces(email)) || 
+      isEmptyOrSpaces(message)) {
       alert("You cannot leave any field empty.");
       return false;
     }
 
-    if (!nameregex.test(name)) {
+    if (User() == null && !nameregex.test(name)) {
       alert("The name should only contain letters!");
       return false;
     }
 
-    if (!emailregex.test(email)) {
+    if (User() == null && !emailregex.test(email)) {
       alert("Please enter a valid email.");
       return false;
     }
@@ -63,8 +64,8 @@ export const Contact = () => {
 
     set(push(messageRef),
     {
-      name: name,
-      email: email,
+      name: User() != null ? User().name : name,
+      email: User() != null ? User().email : email,
       message: message
     })
     .then(() => {
@@ -81,12 +82,16 @@ export const Contact = () => {
       <div className="contact-form">
         <h2>Contact</h2>
         <div className="contact-container">
-          <label htmlFor="name">Name</label>
-          <input type="text" placeholder="Name" id="name"
-            value={name} onChange={(e) => handleInputChange(e)}/>
-          <label htmlFor="email">Email</label>
-          <input type="email" placeholder="youremail@gmail.com" id="email"
-            value={email} onChange={(e) => handleInputChange(e)}/>
+          {User() == null && (
+            <>
+              <label htmlFor="name">Name</label>
+              <input type="text" placeholder="Name" id="name"
+                value={name} onChange={(e) => handleInputChange(e)}/>
+              <label htmlFor="email">Email</label>
+              <input type="email" placeholder="youremail@gmail.com" id="email"
+                value={email} onChange={(e) => handleInputChange(e)}/>
+            </>
+          )}
           <label htmlFor="message">Message</label>
           <textarea type="text" placeholder="What do you want to say to us?" id="message"
             value={message} onChange={(e) => handleInputChange(e)}/>
