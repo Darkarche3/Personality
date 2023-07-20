@@ -82,16 +82,12 @@ export const Contact = () => {
       <div className="contact-form">
         <h2>Contact</h2>
         <div className="contact-container">
-          {User() == null && (
-            <>
-              <label htmlFor="name">Name</label>
-              <input type="text" placeholder="Name" id="name"
-                value={name} onChange={(e) => handleInputChange(e)}/>
-              <label htmlFor="email">Email</label>
-              <input type="email" placeholder="youremail@gmail.com" id="email"
-                value={email} onChange={(e) => handleInputChange(e)}/>
-            </>
-          )}
+          <label htmlFor="name">Name</label>
+          <input type="text" placeholder="Name" id="name"
+            value={name} onChange={(e) => handleInputChange(e)}/>
+          <label htmlFor="email">Email</label>
+          <input type="email" placeholder="youremail@gmail.com" id="email"
+            value={email} onChange={(e) => handleInputChange(e)}/>
           <label htmlFor="message">Message</label>
           <textarea type="text" placeholder="What do you want to say to us?" id="message"
             value={message} onChange={(e) => handleInputChange(e)}/>
