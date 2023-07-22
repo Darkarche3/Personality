@@ -55,8 +55,8 @@ export class ForumList extends Component {
       this.state.currentPage !== prevState.currentPage
     ) {
       this.unsubscribe = onSnapshot(query(
-        fire_posts, 
-        orderBy(this.state.sortBy, this.state.direction), 
+        fire_posts,
+        orderBy(this.state.sortBy, this.state.direction),
         limit(this.state.currentPage * PAGE_SIZE + PAGE_SIZE)),
         this.onPostsCollectionUpdate);;
     }
@@ -74,7 +74,7 @@ export class ForumList extends Component {
 
   componentWillUnmount() {
     if (this.unsubscribe !== undefined) {
-      this.unsubscribe(); 
+      this.unsubscribe();
     }
   }
 
@@ -111,140 +111,142 @@ export class ForumList extends Component {
   render() {
     const { isLoading, currentPage, posts } = this.state;
     return (
-      <div className="container">
+      <div>
         <Navbar />
-        <div className="panel panel-default">
-          <br />
-          <div className="panel-heading">
-            <h3 className="panel-title">Posts</h3>
-          </div>
-          <br />
+        <div className="container">
+          <div className="panel-default">
+            <br />
+            <div className="panel-heading">
+              <h3 className="panel-title">Forum</h3>
+            </div>
+            <br />
 
-          <div className="panel-body">
-            {isLoading && <div className="spinner" />}
-            {!isLoading && (
-              <div>
-                <div className="tablePosts">
-                  <table className="table mb-0">
-                    <thead>
-                      <tr>
-                        <th
-                          name="title"
-                          onDoubleClick={event =>
-                            this.onDoubleClickHeader(event)
-                          }
-                        >
-                          Title
-                          <span>{decodeURI(this.renderSorting("title"))}</span>
-                        </th>
-                        <th
-                          name="plainText"
-                          onDoubleClick={event =>
-                            this.onDoubleClickHeader(event)
-                          }
-                        >
-                          Text
-                          <span>
-                            {decodeURI(this.renderSorting("plainText"))}
-                          </span>
-                        </th>
-                        <th
-                          name="comments"
-                          onDoubleClick={event =>
-                            this.onDoubleClickHeader(event)
-                          }
-                        >
-                          Comments
-                          <span>
-                            {decodeURI(this.renderSorting("comments"))}
-                          </span>
-                        </th>
-                        <th
-                          name="author"
-                          onDoubleClick={event =>
-                            this.onDoubleClickHeader(event)
-                          }
-                        >
-                          Author
-                          <span>{decodeURI(this.renderSorting("author"))}</span>
-                        </th>
-                        <th
-                          name="status"
-                          onDoubleClick={event =>
-                            this.onDoubleClickHeader(event)
-                          }
-                        >
-                          Status
-                          <span>{decodeURI(this.renderSorting("status"))}</span>
-                        </th>
-                        <th
-                          name="timestamp"
-                          onDoubleClick={event =>
-                            this.onDoubleClickHeader(event)
-                          }
-                        >
-                          Created
-                          <span>
-                            {decodeURI(this.renderSorting("timestamp"))}
-                          </span>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {posts.length === 0 && (
-                        <tr className="border-bottom-0">
-                          <td>No posts</td>
+            <div className="panel-body">
+              {isLoading && <div className="spinner" />}
+              {!isLoading && (
+                <div>
+                  <div className="tablePosts">
+                    <table className="table mb-0">
+                      <thead>
+                        <tr>
+                          <th
+                            name="title"
+                            onDoubleClick={event =>
+                              this.onDoubleClickHeader(event)
+                            }
+                          >
+                            Title
+                            <span>{decodeURI(this.renderSorting("title"))}</span>
+                          </th>
+                          <th
+                            name="plainText"
+                            onDoubleClick={event =>
+                              this.onDoubleClickHeader(event)
+                            }
+                          >
+                            Text
+                            <span>
+                              {decodeURI(this.renderSorting("plainText"))}
+                            </span>
+                          </th>
+                          <th
+                            name="comments"
+                            onDoubleClick={event =>
+                              this.onDoubleClickHeader(event)
+                            }
+                          >
+                            Comments
+                            <span>
+                              {decodeURI(this.renderSorting("comments"))}
+                            </span>
+                          </th>
+                          <th
+                            name="author"
+                            onDoubleClick={event =>
+                              this.onDoubleClickHeader(event)
+                            }
+                          >
+                            Author
+                            <span>{decodeURI(this.renderSorting("author"))}</span>
+                          </th>
+                          <th
+                            name="status"
+                            onDoubleClick={event =>
+                              this.onDoubleClickHeader(event)
+                            }
+                          >
+                            Status
+                            <span>{decodeURI(this.renderSorting("status"))}</span>
+                          </th>
+                          <th
+                            name="timestamp"
+                            onDoubleClick={event =>
+                              this.onDoubleClickHeader(event)
+                            }
+                          >
+                            Created
+                            <span>
+                              {decodeURI(this.renderSorting("timestamp"))}
+                            </span>
+                          </th>
                         </tr>
-                      )}
-                      {posts.length > 0 &&
-                        posts
-                          .slice(
-                            currentPage * PAGE_SIZE,
-                            (currentPage + 1) * PAGE_SIZE
-                          )
-                          .map((post, i) => (
-                            <tr
-                              key={post.key}
-                              className={"alt" + ((i % 2) + 1)}
-                            >
-                              <td>
-                                <Link
-                                  to={`/post/${post.key}`}
-                                  className="postTitle"
-                                >
-                                  {post.title}
-                                </Link>
-                              </td>
-                              <td>
-                                {truncate(post.plainText, TRUNCATION_LIMIT)}
-                              </td>
-                              <td>{post.comments - 1}</td>
-                              <td>{post.author}</td>
-                              <td>{post.status}</td>
-                              <td
-                                title={getDateTime(
-                                  getDateObject(post.timestamp)
-                                )}
+                      </thead>
+                      <tbody>
+                        {posts.length === 0 && (
+                          <tr className="border-bottom-0">
+                            <td>No posts</td>
+                          </tr>
+                        )}
+                        {posts.length > 0 &&
+                          posts
+                            .slice(
+                              currentPage * PAGE_SIZE,
+                              (currentPage + 1) * PAGE_SIZE
+                            )
+                            .map((post, i) => (
+                              <tr
+                                key={post.key}
+                                className={"alt" + ((i % 2) + 1)}
                               >
-                                {timeDifference(getDateObject(post.timestamp))}
-                              </td>
-                            </tr>
-                          ))}
-                    </tbody>
-                  </table>
-                </div>
+                                <td>
+                                  <Link
+                                    to={`/post/${post.key}`}
+                                    className="postTitle"
+                                  >
+                                    {post.title}
+                                  </Link>
+                                </td>
+                                <td>
+                                  {truncate(post.plainText, TRUNCATION_LIMIT)}
+                                </td>
+                                <td>{post.comments - 1}</td>
+                                <td>{post.author}</td>
+                                <td>{post.status}</td>
+                                <td
+                                  title={getDateTime(
+                                    getDateObject(post.timestamp)
+                                  )}
+                                >
+                                  {timeDifference(getDateObject(post.timestamp))}
+                                </td>
+                              </tr>
+                            ))}
+                      </tbody>
+                    </table>
+                  </div>
 
-                <PaginationComponent
-                  currentPage={this.state.currentPage}
-                  pagesCount={this.pagesCount}
-                  handlePageClick={(event, page) => this.pageClick(event, page)}
-                />
+                  <PaginationComponent
+                    currentPage={this.state.currentPage}
+                    pagesCount={this.pagesCount}
+                    handlePageClick={(event, page) => this.pageClick(event, page)}
+                  />
+                </div>
+              )}
+              <div className="btn">
+                <Link to="/create" className="btn-bgn">
+                  New Post
+                </Link>
               </div>
-            )}
-            <div>
-              <Link to="/create" className="btn btn-bgn">
-                New Post
-              </Link>
             </div>
           </div>
         </div>

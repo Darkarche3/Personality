@@ -11,15 +11,12 @@ export const Navbar = () => {
   return (
     <div className='sum'>
       <div className='logo'>
-          Personality
+        Personality
       </div>
       <nav classitem="item">
         <ul className="ul">
           <li>
             <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/about">About</Link>
           </li>
           <li>
             <Link to="/contact">Contact</Link>
