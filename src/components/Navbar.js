@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { LoginButton } from './LoginButton';
 import { SignoutButton } from './SignoutButton';
 import { SignupButton } from './SignupButton';
-import { User } from '../scripts/FirebaseUtilities';
+import { isAdmin, User } from '../scripts/FirebaseUtilities';
 import '../styles/Navbar.css';
 
 // The navigation page
@@ -44,7 +44,7 @@ export const Navbar = () => {
               </li>
             </>
           )}
-          {User().username === "admin" && (
+          {isAdmin() && (
             <>
               <li>
                 <Link to="https://personalitydashboard.netlify.app/">Admin</Link>

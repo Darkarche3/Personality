@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Reply from "../components/Reply";
 import Comment from "../components/Comment";
@@ -13,61 +13,58 @@ import {
 } from "../scripts/FirebaseUtilities";
 import { doc, onSnapshot } from "firebase/firestore";
 
-export const ForumPost = (props) => {
-  const [post, setPost] = useState({});
-  const [postKey, setPostKey] = useState("");
-  const [commentArray, setCommentArray] = useState([]);
-  const [showReply, setShowReply] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [title, setTitle] = useState("");
-  let unsubscribe = null;
+export class ForumPost extends Component {
+  state = {
+    post: {},
+    post_key: "",
+    comment_array: [],
+    showReply: false,
+    isLoading: true,
+    title: ""
+  };
+  unsubscribe = null;
 
-  useEffect(() => {
-    getComment(props.match.params.id, doc => {
-      const comment_array = doc2array(doc.data());
-      setCommentArray(comment_array);
+  componentDidMount() {
+    getComment(this.props.match.params.id, doc => {
+      const comment_array = this.doc2array(doc.data());
+      this.setState({ ...this.state, comment_array: comment_array });
     });
-
-    getPost(props.match.params.id, document => {
+    getPost(this.props.match.params.id, docu => {
       // Set the state
-      setPost(document.data());
-      setPostKey(document.id);
-      setIsLoading(false);
+      var data = {
+        post: docu.data(),
+        post_key: docu.id,
+        isLoading: false
+      };
+      this.setState({ ...this.state, ...data });
       // Subscribe to updates of the post
-      unsubscribe = onSnapshot(
-        doc(fire_posts, props.match.params.id), 
-        onPostDocumentUpdate);
+      this.unsubscribe = onSnapshot(
+        doc(fire_posts, this.props.match.params.id), 
+        this.onPostDocumentUpdate);
     });
-  });
+  }
 
   // Keep comments' text and title up to date.
-  // This is achieved by having 
-  // 1) the onSnapshot subscription above; 
-  // 2) comment_array and title in state; 
-  // 3) this callback modifying comment_array and title
-  const onPostDocumentUpdate = () => {
+  // This is achieved by having 1) the onSnapshot subscription above; 2) comment_array and title in state; 3) this callback modifying comment_array and title
+  onPostDocumentUpdate = () => {
     // Update comments
-    getComment(props.match.params.id, doc => {
-      const comment_array = doc2array(doc.data());
-      setCommentArray(comment_array);
+    getComment(this.props.match.params.id, doc => {
+      const comment_array = this.doc2array(doc.data());
+      this.setState({ ...this.state, comment_array: comment_array });
     });
-
     // Update post title
-    getPost(props.match.params.id, doc => {
+    getPost(this.props.match.params.id, doc => {
       const post = doc.data();
-      setPost(post);
+      this.setState({ ...this.state.post, post: post });
     });
   };
 
-  useEffect(() => {
-    // Cancels the snapshot listener.
-    return () => {
-      unsubscribe();
-    };
-  });
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
 
-  const toggleCloseCallback = post_key => {
-    let oldStatus = post.status;
+  toggleCloseCallback = post_key => {
+    let oldStatus = this.state.post.status;
     let msg =
       oldStatus === "open"
         ? "Do you want to close this post to new answers?"
@@ -80,7 +77,7 @@ export const ForumPost = (props) => {
     updatePost(post_key, { status: newStatus });
   };
 
-  const deleteCallback = (post_key, commentid) => {
+  deleteCallback = (post_key, commentid) => {
     const res = window.confirm("Do you really want to delete the content of this comment?");
     if (!res) {
       return;
@@ -92,7 +89,7 @@ export const ForumPost = (props) => {
     };
   };
 
-  const doc2array = comment_array => {
+  doc2array(comment_array) {
     var array = [];
     for (const key in comment_array) {
       var out = {};
@@ -101,63 +98,70 @@ export const ForumPost = (props) => {
       array.push(out);
     }
     return array;
-  };
+  }
 
-  const toggleShowReplyComment = () => {
-    setShowReply(!showReply);
-  };
+  reply(id) {
+    this.toggleShowReplyComment();
+  }
 
-  return (
-    <div className="container">
-      <Navbar />
-      <div>
-        <div className="panel panel-default">
-          <br />
-          <div className="panel-heading">
-            <Link to="/forum">
-              <button className="btn btn-bgn ml-0">
-                &lt;&lt; Back to Forum
-              </button>
-            </Link>
+  toggleShowReplyComment() {
+    this.setState({ ...this.state, showReply: !this.state.showReply });
+  }
+
+  render() {
+    const { isLoading, comment_array, post, post_key, key, showReply } = this.state;
+    return (
+      <div className="container">
+        <Navbar />
+        <div>
+          <div className="panel panel-default">
             <br />
-            <br />
-          </div>
-          <div className="panel-body">
-            {isLoading && <div className="spinner" />}
-            {commentArray.map(comment => (
-              <Comment
-                key={comment.id}
-                comment={comment}
-                post_title={post.title}
-                post_key={postKey}
-                post_status={post.status}
-                deleteCallback={deleteCallback}
-                toggleCloseCallback={toggleCloseCallback}
-              />
-            ))}
-            <div>
-              {!showReply && post.status === "open" && (
-                <button
-                  onClick={() => toggleShowReplyComment()}
-                  className="btn btn-bgn ml-0"
-                >
-                  Reply
+            <div className="panel-heading">
+              <Link to="/">
+                <button className="btn btn-bgn ml-0">
+                  &lt;&lt; Back to Post List
                 </button>
-              )}
+              </Link>
+              <br />
+              <br />
             </div>
+            <div className="panel-body">
+              {isLoading && <div className="spinner" />}
+              {comment_array.map(comment => (
+                <Comment
+                  key={comment.id}
+                  comment={comment}
+                  post_title={post.title}
+                  post_key={post_key}
+                  post_status={post.status}
+                  deleteCallback={this.deleteCallback}
+                  toggleCloseCallback={this.toggleCloseCallback}
+                />
+              ))}
+              <div>
+                {!showReply && post.status === "open" && (
+                  <button
+                    onClick={() => this.reply(key)}
+                    className="btn btn-bgn ml-0"
+                  >
+                    Reply
+                  </button>
+                )}
+              </div>
+            </div>
+            <div className="panel-footer" />
           </div>
-          <div className="panel-footer" />
+        </div>
+        <br />
+        <div>
+          {showReply && (
+            <Reply
+              post_key={this.props.match.params.id}
+              toggleShowReply={() => this.toggleShowReplyComment()}
+            />
+          )}
         </div>
       </div>
-      <br />
-      <div>
-        {showReply && (
-          <Reply
-            post_key={props.match.params.id}
-            toggleShowReply={() => toggleShowReplyComment()}
-          />
-        )}
-      </div>
-    </div>
-  );
-};
+    );
+  }
+}

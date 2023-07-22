@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
-import TextEditor from "./Editor/TextEditor";
+import React, { Component } from "react";
+import TextEditor from "./TextEditor/TextEditor";
 import {
   User,
   fire_comments,
@@ -9,36 +9,36 @@ import {
 } from "../scripts/FirebaseUtilities";
 import { serverTimestamp, doc } from "firebase/firestore";
 
-const Reply = (props) => {
-  const [post, setPost] = useState(undefined);
-  const [postKey, setPostKey] = useState("");
-  const [commentKey, setCommentKey] = useState("");
-  const [richText, setRichText] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+class Reply extends Component {
+  state = {
+    post: undefined,
+    post_key: "",
+    comment_key: "",
+    richText: "",
+    isLoading: false
+  };
+  fire_comment = doc(fire_comments, this.props.post_key);
+  refEditor = React.createRef();
+  initialRichText = "<p></p>"; // this is rich text (I mean a string with HTML code)
 
-  const fire_comment = doc(fire_comments, props.post_key);
-  const refEditor = useRef();
-  const initialRichText = "<p></p>"; // this is rich text (I mean a string with HTML code)
-
-  useEffect(() => {
-    getPost(props.post_key, doc => {
-      setPost(doc.data());
-      setPostKey(doc.id);
-      setCommentKey(doc.data().comments + 1);
-      setRichText("");
-      setIsLoading(false);
+  componentDidMount() {
+    getPost(this.props.post_key, doc => {
+      this.setState({
+        ...this.state,
+        post: doc.data(),
+        post_key: doc.id,
+        comment_key: doc.data().comments + 1,
+        richText: "",
+        isLoading: false
+      });
     });
-  });
+  }
 
-  /**
-   * Handles a submit event.
-   * 
-   * @param { Event } e 
-   */
-  const onSubmit = e => {
+  onSubmit = e => {
     e.preventDefault();
-    var richText = refEditor.current.valueHtml;
-    var plainText = refEditor.current.plainText;
+    const { comment_key } = this.state;
+    var richText = this.refEditor.current.state.valueHtml;
+    var plainText = this.refEditor.current.state.plainText;
     if (plainText === "" || richText === "") {
       alert("Text cannot be empty");
       e.preventDefault();
@@ -53,52 +53,56 @@ const Reply = (props) => {
       timestamp: timestamp
     };
 
-    pushComment(props.post_key, commentKey, data);
+    pushComment(this.props.post_key, comment_key, data);
 
     // Update number of comments in post collection
     updatePost(
-      props.post_key,
-      { comments: commentKey },
+      this.props.post_key,
+      { comments: this.state.comment_key },
       () => {
         // Close Reply menu
-        props.toggleShowReply();
+        this.props.toggleShowReply();
         // Can avoid this refresh with observables but easier to reload the page
         window.location.reload();
       }
     );
   };
 
-  return (
-    <div className="panel panel-default">
-      <div className="panel-heading" />
-      <div className="panel-body">
-        <form onSubmit={onSubmit}>
-          <div className="form-group">
-            <div className="border border-dark">
-              <TextEditor
-                autoFocus
-                ref={refEditor}
-                post_key={postKey}
-                initialRichText={initialRichText}
-                height="10em"
-              />
+  render() {
+    let { post_key } = this.state;
+    return (
+      <div className="panel panel-default">
+        <div className="panel-heading" />
+        <div className="panel-body">
+          <form onSubmit={this.onSubmit}>
+            <div className="form-group">
+              <div className="border border-dark">
+                <TextEditor
+                  autoFocus
+                  ref={this.refEditor}
+                  post_key={post_key}
+                  initialRichText={this.initialRichText}
+                  height="10em"
+                />
+              </div>
             </div>
-          </div>
-          <div>
-            <button type="submit" className="btn btn-bgn">
-              Submit
-            </button>
-            <button
-              type="submit"
-              className="btn btn-bgn ml-1"
-              onClick={() => props.toggleShowReply()}
-            >
-              Cancel
-            </button>
-          </div>
-        </form>
+            <div>
+              <button type="submit" className="btn btn-bgn">
+                Submit
+              </button>
+              <button
+                type="submit"
+                className="btn btn-bgn ml-1"
+                onClick={() => this.props.toggleShowReply()}
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+}
+
 export default Reply;

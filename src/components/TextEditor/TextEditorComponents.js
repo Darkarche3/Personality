@@ -17,13 +17,13 @@ export const Button = styled.span`
   cursor: pointer;
   color: black;
   ${props =>
-    !props.isActive &&
+    !props.active &&
     css`
       padding: 1px;
       border: 1px transparent rgba(255, 255, 255, 0.5);
     `};
   ${props =>
-    props.isActive &&
+    props.active &&
     css`
       padding: 0px;
       border: 1px solid rgb(122, 121, 121);

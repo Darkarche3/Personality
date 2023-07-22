@@ -1,7 +1,6 @@
-import React, { useState, useRef } from "react";
-import { Editor, Block, Value } from "slate";
-import { getEventRange } from "slate-react";
-import InsertImages from "slate-drop-or-paste-images";
+import React from "react";
+import { Block, Value } from "slate";
+import { Editor, getEventRange } from "slate-react";
 import { isKeyHotkey } from "is-hotkey";
 import {
   TextArea,
@@ -21,7 +20,7 @@ import { Progress } from "reactstrap";
  * Deserialize == convert DOM to Slate model
  * Serialize == convert Slate model to DOM
  *
- * @type { Object }
+ * @type {Object}
  */
 const rules = [
   {
@@ -39,7 +38,7 @@ const rules = [
         img: "image"
       };
       const type = BLOCK_TAGS[el.tagName.toLowerCase()];
-
+      //console.log('deserialize block. type:', type, el.tagName.toLowerCase())
       if (type) {
         if (type === "link") {
           var obj = {
@@ -66,13 +65,15 @@ const rules = [
       }
     },
     serialize(obj, children) {
+      //console.log("serialize block/inline. obj.object:", obj.object, obj.toJSON());
       if (obj.object === "inline") {
         if (obj.type === "link") {
-          // This is what gets stored in Firebase
+          //this is what gets stored in firebase
           return <a href={obj.toJSON().data.href}>{children}</a>;
         }
       }
       if (obj.object === "block") {
+        //console.log("  serialize block. obj.type:", obj.type, obj.toJSON());
         switch (obj.type) {
           case "code":
             return (
@@ -155,16 +156,15 @@ const rules = [
 
 /**
  * Create a new serializer instance with our 'rules'
- * 
- * @type { Html }
+ *  @type {Html}
  */
 const html = new Html({ rules });
 
 /**
  * A change helper to standardize wrapping links.
  *
- * @param { Editor } editor
- * @param { String } href
+ * @param {Editor} editor
+ * @param {String} href
  */
 const wrapLink = (editor, href) => {
   editor.wrapInline({
@@ -178,34 +178,18 @@ const wrapLink = (editor, href) => {
 /**
  * A change helper to standardize unwrapping links.
  *
- * @param { Editor } editor
+ * @param {Editor} editor
  */
 const unwrapLink = editor => {
   editor.unwrapInline("link");
 };
 
 /**
- * Adds the plugin to your set of plugins.
- */
-const plugins = [
-  InsertImages({
-    extensions: ["png", "jpg"],
-    insertImage: (change, file) => {
-      return change.insertBlock({
-        type: "image",
-        isVoid: true,
-        data: { file }
-      });
-    }
-  })
-];
-
-/**
  * A change function to standardize inserting images.
  *
- * @param { Editor } editor
- * @param { String } src
- * @param { Range } target
+ * @param {Editor} editor
+ * @param {String} src
+ * @param {Range} target
  */
 const insertImageUrl = (editor, src, target) => {
   if (target) {
@@ -220,7 +204,7 @@ const insertImageUrl = (editor, src, target) => {
 /**
  * The editor's schema.
  *
- * @type { Object }
+ * @type {Object}
  */
 const schema = {
   document: {
@@ -243,80 +227,166 @@ const schema = {
   }
 };
 
-const TextEditor = (props) => {
-  const val = Value.fromJSON(html.deserialize(""));
-
-  const [editor, setEditor] = useState(null);
-  const [postKey, setPostKey] = useState("");
-  const [value, setValue] = useState(val);
-  const [plainText, setPlainText] = useState("");
-  const [valueHtml, setValueHtml] = useState("");
-  const [uploadProgress, setUploadProgress] = useState(100);
-  const inputRef = useRef(null);
-
+class TextEditor extends React.Component {
   /**
    * Store a reference to the `editor`.
    *
-   * @param { Editor } editor
+   * @param {Editor} editor
    */
-  const editorRef = editor => {
-    setEditor(editor);
+  ref = editor => {
+    this.editor = editor;
   };
 
   /**
-   * Sets state from props.
-   * 
+   * State: serialize the initial editor value.
+   * @type {Object}
+   */
+  state = {
+    post_key: "",
+    value: Value.fromJSON(html.deserialize("")),
+    plainText: "",
+    valueHtml: "",
+    uploadProgress: 100
+  };
+
+  /**
+   * Set state from props
    * @param {*} nextProps
    */
-  const componentWillReceiveProps = nextProps => {
-    setValue(Value.fromJSON(html.deserialize(nextProps.initialRichText)));
-    setPlainText(Plain.serialize(value));
-    setValueHtml(nextProps.initialRichText);
-    setPostKey(nextProps.postKey);
-  };
+  componentWillReceiveProps(nextProps) {
+    const value = Value.fromJSON(html.deserialize(nextProps.initialRichText));
+    const plainText = Plain.serialize(value);
+    const valueHtml = nextProps.initialRichText;
+    this.setState({ ...this.state, post_key: nextProps.post_key, value, plainText, valueHtml });
+  }
 
   /**
-   * Checks whether the current selection has a link in it.
+   * Check whether the current selection has a link in it.
    *
-   * @return { Boolean }
+   * @return {Boolean} hasLinks
    */
-  const hasLinks = () => {
+  hasLinks = () => {
+    const { value } = this.state;
     return value.inlines.some(inline => inline.type === "link");
   };
 
-  const _handleIconClick = () => {
-    inputRef.current.click();
+  _handleIconClick = () => {
+    var inputField = this.refs.fileField;
+    inputField.click();
   };
 
   /**
-   * On change, saves the new `value`.
+   * Render the app.
    *
-   * @param { Editor } editor
+   * @return {Element} element
    */
-  const onChange = ({ value }) => {
-    const plainText = Plain.serialize(value);
+  render() {
+    let {uploadProgress, value} = this.state;
+    return (
+      <div className="textEditor">
+        <EditorContainer>
+          <Toolbar>
+            {this.renderMarkButton("bold", "format_bold")}
+            {this.renderMarkButton("italic", "format_italic")}
+            {this.renderMarkButton("underlined", "format_underlined")}
+            {this.renderBlockButton("code", "code")}
+            {this.renderBlockButton("heading-one", "looks_one")}
+            {this.renderBlockButton("heading-two", "looks_two")}
+            {this.renderBlockButton("blockquote", "format_quote")}
+            {this.renderBlockButton("numbered-list", "format_list_numbered")}
+            {this.renderBlockButton("bulleted-list", "format_list_bulleted")}
+            {/* Insert link */}
+            <Button
+              active={this.hasLinks()}
+              onMouseDown={event => this.onClickLink(event, "looks_two")}
+            >
+              <Icon title="insert_link">insert_link</Icon>
+            </Button>
+            {/* Insert image URL */}
+            <Button onMouseDown={this.onClickImageUrl}>
+              <Icon title="Insert image url">image</Icon>
+            </Button>
+            {/* Upload image */}
+            <div className="element">
+              <Icon
+                title="Insert image url"
+                onClick={this._handleIconClick}
+                style={{ cursor: "pointer" }}
+              >
+                cloud_upload
+              </Icon>
+              <input
+                ref="fileField"
+                type="file"
+                id="upload"
+                name="upload"
+                accept="image/png, image/jpeg"
+                multiple=""
+                style={{ display: "none", width: "auto", height: "auto" }}
+                onChange={event => this.onChangeInput(event)}
+              />
+            </div>
+            {/* Progress bar of Upload image */}
+            {uploadProgress < 100 && (
+              <Progress
+                animated
+                value={uploadProgress}
+                color="info"
+                max={100}
+                style={{ width: "200px" }}
+              >
+                {uploadProgress.toFixed(0)}
+              </Progress>
+            )}
+          </Toolbar>
+          <TextArea>
+            <Editor
+              spellCheck
+              autoFocus
+              placeholder=""
+              style={{
+                height: this.props.height ? this.props.height : "25em"
+              }}
+              ref={this.ref}
+              value={value}
+              schema={schema}
+              onChange={this.onChange}
+              onKeyDown={this.onKeyDown}
+              renderMark={this.renderMark}
+              renderNode={this.renderBlock}
+            />
+          </TextArea>
+        </EditorContainer>
+        <div className="resizable grippie bbr-sm mr-0" />
+      </div>
+    );
+  }
 
+  /**
+   * On change, save the new `value`.
+   *
+   * @param {Editor} editor
+   */
+  onChange = ({ value }) => {
+    const plainText = Plain.serialize(value);
+    
     // Set state
     var valueHtml = html.serialize(Value.fromJSON(value));
-
-    setValue(value);
-    setPlainText(plainText);
-    setValueHtml(valueHtml);
+    this.setState({ ...this.state, value, plainText, valueHtml });
   };
 
   /**
-   * On key down, if it is a formatting command toggles a mark.
+   * On key down, if it is a formatting command toggle a mark.
    *
-   * @param { Event } event
-   * @param { Editor } editor
-   * @return { Change }
+   * @param {Event} event
+   * @param {Editor} editor
+   * @return {Change}
    */
-  const onKeyDown = (event, editor, next) => {
+  onKeyDown = (event, editor, next) => {
     let mark;
     const isBoldHotkey = isKeyHotkey("mod+b");
     const isItalicHotkey = isKeyHotkey("mod+i");
     const isUnderlinedHotkey = isKeyHotkey("mod+u");
-
     if (isBoldHotkey(event)) {
       mark = "bold";
     } else if (isItalicHotkey(event)) {
@@ -326,31 +396,31 @@ const TextEditor = (props) => {
     } else {
       return next();
     }
-
     event.preventDefault();
     editor.toggleMark(mark);
   };
 
   /**
-   * Callback firing after a user has selected a file using the input element.
+   * Callback firing after a user has selected a file using the input element
    *
-   * @param { Event } event
+   * @param {Object} event
    */
-  const onChangeInput = (event) => {
+  onChangeInput(event) {
     event.preventDefault();
+    const { editor } = this;
     const target = getEventRange(event, editor);
-    handleFileUpload(editor, target, event.target.files);
+    this.handleFileUpload(editor, target, event.target.files);
   }
 
   /**
-   * Renders a Slate mark.
+   * Render a Slate mark.
    *
-   * @param { Object } props
-   * @param { Editor } editor
-   * @param { Function } next
-   * @return { Element }
+   * @param {Object} props
+   * @param {Editor} editor
+   * @param {Function} next
+   * @return {Element}
    */
-  const renderMark = (props, editor, next) => {
+  renderMark = (props, editor, next) => {
     const { children, mark, attributes } = props;
     switch (mark.type) {
       case "bold":
@@ -365,14 +435,14 @@ const TextEditor = (props) => {
   };
 
   /**
-   * Deserialize: Renders a Slate node/block.
+   * Deserialize: Render a Slate node/block.
    *
-   * @param { Object } props
-   * @param { Editor } editor
-   * @param { Function } next
-   * @return { Element }
+   * @param {Object} props
+   * @param {Editor} editor
+   * @param {Function} next
+   * @return {Element}
    */
-  const renderBlock = (props, editor, next) => {
+  renderBlock = (props, editor, next) => {
     const { attributes, children, node } = props;
     switch (node.type) {
       case "code":
@@ -408,26 +478,27 @@ const TextEditor = (props) => {
   };
 
   /**
-   * Renders (return HTML for icons) a block-toggling toolbar button.
+   * Render (return HTML for icons) a block-toggling toolbar button
    *
-   * @param { String } type
-   * @param { String } icon
-   * @return { Element }
+   * @param {String} type
+   * @param {String} icon
+   * @return {Element}
    */
-  const renderBlockButton = (type, icon) => {
-    let isActive = hasBlock(type);
+  renderBlockButton = (type, icon) => {
+    let isActive = this.hasBlock(type);
     if (["numbered-list", "bulleted-list"].includes(type)) {
-      const { document, blocks } = value;
+      const {
+        value: { document, blocks }
+      } = this.state;
       if (blocks.size > 0) {
         const parent = document.getParent(blocks.first().key);
-        isActive = hasBlock("list-item") && parent && parent.type === type;
+        isActive = this.hasBlock("list-item") && parent && parent.type === type;
       }
     }
-
     return (
       <Button
         isActive={isActive}
-        onMouseDown={event => onClickBlockBtn(event, type)}
+        onMouseDown={event => this.onClickBlockBtn(event, type)}
       >
         <Icon title={type}>{icon}</Icon>
       </Button>
@@ -435,19 +506,18 @@ const TextEditor = (props) => {
   };
 
   /**
-   * Renders (return HTML for icons) a mark-toggling toolbar button.
+   * Render (return HTML for icons) a mark-toggling toolbar button
    *
-   * @param { String } type
-   * @param { String } icon
-   * @return { Element }
+   * @param {String} type
+   * @param {String} icon
+   * @return {Element}
    */
-  const renderMarkButton = (type, icon) => {
-    const isActive = hasMark(type);
-
+  renderMarkButton = (type, icon) => {
+    const isActive = this.hasMark(type);
     return (
       <Button
         isActive={isActive}
-        onMouseDown={event => onClickMarkBtn(event, type)}
+        onMouseDown={event => this.onClickMarkBtn(event, type)}
       >
         <Icon title={type}>{icon}</Icon>
       </Button>
@@ -455,22 +525,24 @@ const TextEditor = (props) => {
   };
 
   /**
-   * Checks if the current selection has a mark with `type` in it.
+   * Check if the current selection has a mark with `type` in it.
    *
-   * @param { String } type
-   * @return { Boolean }
+   * @param {String} type
+   * @return {Boolean}
    */
-  const hasMark = type => {
+  hasMark = type => {
+    const { value } = this.state;
     return value.activeMarks.some(mark => mark.type === type);
   };
 
   /**
-   * Checks if the any of the currently selected blocks are of `type`.
+   * Check if the any of the currently selected blocks are of `type`.
    *
-   * @param { String } type
-   * @return { Boolean }
+   * @param {String} type
+   * @return {Boolean}
    */
-  const hasBlock = type => {
+  hasBlock = type => {
+    const { value } = this.state;
     return value.blocks.some(node => node.type === type);
   };
 
@@ -478,24 +550,27 @@ const TextEditor = (props) => {
    * When a mark button is clicked, toggle the current mark.
    * Callback for renderMarkButton
    *
-   * @param { Event } event
-   * @param { String } type
+   * @param {Event} event
+   * @param {String} type
    */
-  const onClickMarkBtn = (event, type) => {
+  onClickMarkBtn = (event, type) => {
     event.preventDefault();
-    editor.toggleMark(type);
+    this.editor.toggleMark(type);
   };
 
   /**
-   * When clicking a link, if the selection has a link in it, removes the link.
-   * Otherwise, adds a new link with an href and text.
+   * When clicking a link, if the selection has a link in it, remove the link.
+   * Otherwise, add a new link with an href and text.
    *
-   * @param { Event } event
-   * @param { String } type
+   * @param {Event} event
+   * @param {String} type
    */
-  const onClickLink = (event, type) => {
+  onClickLink = (event, type) => {
     event.preventDefault();
-    const hasLinks = hasLinks();
+    const { editor } = this;
+    const { value } = editor;
+    //const { document } = value;
+    const hasLinks = this.hasLinks();
     if (hasLinks) {
       editor.command(unwrapLink);
     } else if (value.selection.isExpanded) {
@@ -524,17 +599,19 @@ const TextEditor = (props) => {
    * When a block button is clicked, toggle the block type.
    * Callback for renderBlockButton
    *
-   * @param { Event } event
-   * @param { String } type
+   * @param {Event} event
+   * @param {String} type
    */
-  const onClickBlockBtn = (event, type) => {
+  onClickBlockBtn = (event, type) => {
     event.preventDefault();
+    const { editor } = this;
+    const { value } = editor;
     const { document } = value;
     const DEFAULT_NODE = "paragraph";
     // Handle everything but list buttons.
     if (type !== "bulleted-list" && type !== "numbered-list") {
-      const isActive = hasBlock(type);
-      const isList = hasBlock("list-item");
+      const isActive = this.hasBlock(type);
+      const isList = this.hasBlock("list-item");
       if (isList) {
         editor
           .setBlocks(isActive ? DEFAULT_NODE : type)
@@ -545,7 +622,7 @@ const TextEditor = (props) => {
       }
     } else {
       // Handle the extra wrapping required for list buttons.
-      const isList = hasBlock("list-item");
+      const isList = this.hasBlock("list-item");
       const isType = value.blocks.some(block => {
         return !!document.getClosest(block.key, parent => parent.type === type);
       });
@@ -569,54 +646,44 @@ const TextEditor = (props) => {
   /**
    * On clicking the "insert image url" button, prompt for an image and insert it
    *
-   * @param { Event } event
+   * @param {Event} event
    */
-  const onClickImageUrl = event => {
+  onClickImageUrl = event => {
     event.preventDefault();
     const src = window.prompt("Enter the URL of the image:");
     if (!src) return;
-    editor.command(insertImageUrl, src);
+    this.editor.command(insertImageUrl, src);
   };
 
-  /**
-   * Handles a file upload.
-   * 
-   * @param { Editor } editor
-   * @param { Range } target
-   * @param { File[] } files
-   */
-  const handleFileUpload = (editor, target, files) => {
+  handleFileUpload = (editor, target, files) => {
     for (const file of files) {
       const reader = new FileReader();
       const [mime] = file.type.split("/");
       if (mime !== "image") continue;
-
-      // Callback to update the progress bar during the upload
+      //Callback to update the progress bar during the upload
       const onUploadProgress = uploadProgress => {
-        setUploadProgress(uploadProgress);
+        this.setState({ ...this.state, uploadProgress });
       };
-
-      // Callback to insert block in Slate model with src, the image's location in firebase
+      //Callback to insert block in Slate model with src, the image's location in firebase
       const onSuccessfulUpload = src => {
         editor.insertBlock({
           type: "image",
           data: { src }
         });
       };
-
       const onError = (msg, error) => {
         alert(msg);
         console.error(error);
       };
-
       reader.addEventListener("load", () => {
         if (target) {
           editor.select(target);
         }
-
-        // Saves file to cloud storage.
+        //This saves image in <img> element, which becomes big (too many chars) for firebase
+        //editor.command(this.insertImageUrl, reader.result, target);
+        // Save file to cloud storage (e.g. firebase)
         editor.command(
-          insertImage2Storage,
+          this.insertImage2Storage,
           file,
           onUploadProgress,
           onSuccessfulUpload,
@@ -631,13 +698,13 @@ const TextEditor = (props) => {
   /**
    * Upload a file to firebase storage.
    *
-   * @param { Editor } editor - Slate's Editor
-   * @param { File } file - The File object to be uploaded
+   * @param {Editor} editor - Slate's Editor
+   * @param {File} file - The File object to be uploaded
    * @callback [onUploadProgress] - Callback on upload progress triggering when the file is being uploading.
    * @callback [onSuccessfulUpload] - Callback triggering when the file is successfully uploaded
    * @callback [onError] - Callback on error message and object triggering when the upload encounters an error
    */
-  const insertImage2Storage = (
+  insertImage2Storage = (
     editor,
     file,
     onUploadProgress = undefined,
@@ -650,7 +717,7 @@ const TextEditor = (props) => {
     };
     // Upload to Storage passing callbacks. Note that unregister is called in function on complete or on error
     uploadToStorage(
-      postKey,
+      this.state.post_key,
       file,
       metadata,
       onUploadProgress,
@@ -658,85 +725,6 @@ const TextEditor = (props) => {
       onError
     );
   };
+}
 
-  return (
-    <div className="textEditor">
-      <EditorContainer>
-        <Toolbar>
-          {renderMarkButton("bold", "format_bold")}
-          {renderMarkButton("italic", "format_italic")}
-          {renderMarkButton("underlined", "format_underlined")}
-          {renderBlockButton("code", "code")}
-          {renderBlockButton("heading-one", "looks_one")}
-          {renderBlockButton("heading-two", "looks_two")}
-          {renderBlockButton("blockquote", "format_quote")}
-          {renderBlockButton("numbered-list", "format_list_numbered")}
-          {renderBlockButton("bulleted-list", "format_list_bulleted")}
-          {/* Insert link */}
-          <Button
-            active={hasLinks()}
-            onMouseDown={event => onClickLink(event, "looks_two")}
-          >
-            <Icon title="insert_link">insert_link</Icon>
-          </Button>
-          {/* Insert image URL */}
-          <Button onMouseDown={onClickImageUrl}>
-            <Icon title="Insert image url">image</Icon>
-          </Button>
-          {/* Upload image */}
-          <div className="element">
-            <Icon
-              title="Insert image url"
-              onClick={_handleIconClick}
-              style={{ cursor: "pointer" }}
-            >
-              cloud_upload
-            </Icon>
-            <input
-              ref={inputRef}
-              type="file"
-              id="upload"
-              name="upload"
-              accept="image/png, image/jpeg"
-              multiple=""
-              style={{ display: "none", width: "auto", height: "auto" }}
-              onChange={event => onChangeInput(event)}
-            />
-          </div>
-          {/* Progress bar of Upload image */}
-          {uploadProgress < 100 && (
-            <Progress
-              animated
-              value={uploadProgress}
-              color="info"
-              max={100}
-              style={{ width: "200px" }}
-            >
-              {uploadProgress.toFixed(0)}
-            </Progress>
-          )}
-        </Toolbar>
-        <TextArea>
-          <Editor
-            spellCheck
-            autoFocus
-            placeholder=""
-            style={{
-              height: props.height ? props.height : "25em"
-            }}
-            ref={editorRef}
-            value={value}
-            plugins={plugins}
-            schema={schema}
-            onChange={onChange}
-            onKeyDown={onKeyDown}
-            renderMark={renderMark}
-            renderNode={renderBlock}
-          />
-        </TextArea>
-      </EditorContainer>
-      <div className="resizable grippie bbr-sm mr-0" />
-    </div>
-  );
-};
 export default TextEditor;
