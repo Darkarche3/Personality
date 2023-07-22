@@ -1,0 +1,42 @@
+h2 {
+    text-align: center;
+}
+.login-container {
+    justify-content: center;
+    display: grid;
+    color: white;
+    text-align: center;
+}
+
+label {
+    color: black;
+}
+
+.login-form {
+    justify-content: center;
+    display: grid;
+    color: black;
+    text-align: center;
+}
+
+input {
+    margin: 0.5rem 0;
+    padding: 1rem;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+button {
+    font-size: 20px;
+    margin: 0.5rem 0;
+    border: none;
+    background-color: black;
+    padding: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #ffffff;
+}
+
+a.login {
+    color: black;
+}
