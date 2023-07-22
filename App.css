@@ -1,0 +1,20 @@
+/*body {
+  background-image: url(./components/assets/pexels-andrea-piacquadio-3760072.jpg);
+}
+*/
+
+h1 {
+  font-weight: bolder;
+  font-size: 100px;
+  color: maroon;
+  padding: 0rem;
+  margin: 10px 10px 0px 50px;
+}
+
+.App {
+  justify-content: center;
+  display: grid;
+  text-align: center;
+  font-weight: bolder;
+  font-size: 50px;
+}
