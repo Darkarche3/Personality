@@ -1,55 +1,53 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import TextEditor from "./Editor/TextEditor";
+import TextEditor from "./TextEditor/TextEditor";
 import {
+  fire_posts,
   getPost,
   getComment,
   updatePost,
   updateComment
 } from "../scripts/FirebaseUtilities";
-import { serverTimestamp } from "firebase/firestore";
+import { doc, serverTimestamp } from "firebase/firestore";
 
-export const EditForum = (props) => {
-  const [title, setTitle] = useState("");
-  const [plainText, setPlainText] = useState("");
-  const [richText, setRichText] = useState("");
-  const [postKey, setPostKey] = useState(props.match.params.postkey);
+export class EditForum extends Component {
+  state = {
+    title: "",
+    plainText: "",
+    richText: "",
+    post_key: this.props.match.params.postkey
+  };
+  refEditor = React.createRef();
+  editingPost = this.props.match.params.commentid === "1";
 
-  const refEditor = useRef();
-  const editingPost = props.match.params.commentid === "1";
-
-  useEffect(() => {
-    if (editingPost) {
-      getPost(props.match.params.postkey, doc => {
+  componentDidMount() {
+    if (this.editingPost) {
+      this.fire_post = doc(fire_posts, this.props.match.params.postkey);
+      getPost(this.props.match.params.postkey, doc => {
         const post = doc.data();
-        setTitle(post.title);
+        this.setState({ ...this.state, title: post.title });
       });
     }
 
-    getComment(props.match.params.postkey, doc => {
-      setPlainText(doc.data()[props.match.params.commentid].plainText);
-      setRichText(doc.data()[props.match.params.commentid].richText);
+    getComment(this.props.match.params.postkey, doc => {
+      this.setState({
+        ...this.state,
+        plainText: doc.data()[this.props.match.params.commentid].plainText,
+        richText: doc.data()[this.props.match.params.commentid].richText
+      });
     });
-  });
-
-  /**
-   * Changes the title.
-   * 
-   * @param { Event } e
-   */
-  const onChangeTitle = e => {
-    setTitle(e.target.value);
   }
 
-  /**
-   * Handles a submit event.
-   * 
-   * @param { Event } e 
-   */
-  const onSubmit = e => {
+  // Change title
+  onChangeTitle = e => {
+    this.setState({ ...this.state, [e.target.name]: e.target.value });
+  };
+
+  onSubmit = e => {
     // Get the rich text (I mean a string with HTML code) from the reference to TextEditor
-    var plainText = refEditor.current.plainText;
-    var richText = refEditor.current.valueHtml;
+    var plainText = this.refEditor.current.state.plainText;
+    var richText = this.refEditor.current.state.valueHtml;
+    //var plainText = this.refEditor.current.state.plainText;
     // Send to Firebase
     e.preventDefault();
     // Get document with all comments, push new comment
@@ -59,74 +57,79 @@ export const EditForum = (props) => {
       lastEdit: serverTimestamp()
     };
     updateComment(
-      props.match.params.postkey,
-      props.match.params.commentid,
+      this.props.match.params.postkey,
+      this.props.match.params.commentid,
       data_comment
     );
 
-    if (editingPost) {
-      const plainText = refEditor.current.plainText;
+    if (this.editingPost) {
+      const { title } = this.state;
+      const plainText = this.refEditor.current.state.plainText;
       const data_post = {
         plainText: plainText,
         title: title,
         lastEdit: serverTimestamp()
       };
-      updatePost(props.match.params.postkey, data_post);
+      updatePost(this.props.match.params.postkey, data_post);
     }
     // Go back to post
-    setTitle("");
-    setPlainText("");
-    setRichText("");
-
-    props.history.push("/post/" + props.match.params.postkey);
+    this.setState({
+      title: "",
+      plainText: "",
+      richText: ""
+    });
+    this.props.history.push("/post/" + this.props.match.params.postkey);
   };
 
-  return (
-    <div className="container">
-      <div className="panel panel-default">
-        <br />
-        <div className="panel-heading">
-          {editingPost && <h3 className="panel-title">Edit Post</h3>}
-          {!editingPost && <h3 className="panel-title">Edit Comment</h3>}
-        </div>
-        <br />
-        <div className="panel-body">
-          <form onSubmit={onSubmit}>
-            {this.editingPost && (
+  render() {
+    const { title, post_key, richText } = this.state;
+    return (
+      <div className="container">
+        <div className="panel panel-default">
+          <br />
+          <div className="panel-heading">
+            {this.editingPost && <h3 className="panel-title">Edit Post</h3>}
+            {!this.editingPost && <h3 className="panel-title">Edit Comment</h3>}
+          </div>
+          <br />
+          <div className="panel-body">
+            <form onSubmit={this.onSubmit}>
+              {this.editingPost && (
+                <div className="form-group">
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="title"
+                    value={title}
+                    onChange={this.onChangeTitle}
+                    placeholder="Title"
+                  />
+                </div>
+              )}
               <div className="form-group">
-                <input
-                  type="text"
-                  className="form-control"
-                  name="title"
-                  value={title}
-                  onChange={onChangeTitle}
-                  placeholder="Title"
-                />
+                <div className="border border-dark">
+                  <TextEditor
+                    ref={this.refEditor}
+                    post_key={post_key}
+                    initialRichText={richText}
+                  />
+                </div>
               </div>
-            )}
-            <div className="form-group">
-              <div className="border border-dark">
-                <TextEditor
-                  ref={refEditor}
-                  post_key={postKey}
-                  initialRichText={richText}
-                />
+              <div>
+                <button type="submit" className="btn btn-bgn">
+                  Submit
+                </button>
+                <Link
+                  to={`/post/${this.props.match.params.postkey}`}
+                  className="btn btn-bgn ml-1"
+                >
+                  Cancel
+                </Link>
               </div>
-            </div>
-            <div>
-              <button type="submit" className="btn btn-bgn">
-                Submit
-              </button>
-              <Link
-                to={`/post/${props.match.params.postkey}`}
-                className="btn btn-bgn ml-1"
-              >
-                Cancel
-              </Link>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+}

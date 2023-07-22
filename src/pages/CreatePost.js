@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import TextEditor from "../components/Editor/TextEditor";
+import TextEditor from "../components/TextEditor/TextEditor";
 import {
   User,
   pushComment,
@@ -10,50 +10,39 @@ import {
 import { serverTimestamp } from "firebase/firestore";
 import { Navbar } from "../components/Navbar";
 
-export const CreatePost = (props) => {
-  const [title, setTitle] = useState("");
-  const [postKey, setPostKey] = useState("");
+export class CreatePost extends Component {
+  state = {
+    title: "",
+    post_key: ""
+  };
+  fire_post = getPostReference();
+  refEditor = React.createRef();
+  initialRichText = ""; // this is rich text (I mean a string with HTML code)
 
-  const fire_post = getPostReference();
-  const refEditor = useRef();
-  const initialRichText = "";
-
-  useEffect(() => {
-    // Creates a reference to a new unsaved Post.
-    setPostKey(fire_post.id);
-  });
-
-  /**
-   * Changes the title. 
-   * 
-   * @param { Event } e
-   */
-  const onChangeTitle = e => {
-    setTitle(e.target.value);
+  componentDidMount() {
+    //Create a reference to a new unsaved Post
+    this.setState({ ...this.stat, post_key: this.fire_post.id });
+  }
+  // Change title
+  onChangeTitle = e => {
+    this.setState({ ...this.state, [e.target.name]: e.target.value });
   };
 
-  /**
-   * Sends the Post data to Firebase. 
-   * 
-   * @param { Event } e 
-   */
-  const onSubmit = e => {
-    // Get the rich text (I mean a string with HTML code) from the reference to TextEditor.
-    var richText = refEditor.current.valueHtml;
-    var plainText = refEditor.current.plainText;
-
+  onSubmit = e => {
+    // Get the rich text (I mean a string with HTML code) from the reference to TextEditor
+    var richText = this.refEditor.current.state.valueHtml;
+    var plainText = this.refEditor.current.state.plainText;
+    const { title } = this.state;
     if (title === "") {
       alert("Title cannot be empty");
       e.preventDefault();
       return;
     }
-
     if (plainText === "" || richText === "") {
       alert("Text cannot be empty");
       e.preventDefault();
       return;
     }
-
     // Send to Firebase
     e.preventDefault();
     var author = User().username;
@@ -67,7 +56,6 @@ export const CreatePost = (props) => {
       lastEdit: timestamp,
       timestamp: timestamp
     };
-
     const onSuccessfullySetDocument = () => {
       // Get document with all comments, push new comment
       var data_comment = {
@@ -77,55 +65,57 @@ export const CreatePost = (props) => {
         lastEdit: timestamp,
         timestamp: timestamp
       };
-
-      pushComment(postKey, 1, data_comment, () => {
+      pushComment(this.state.post_key, 1, data_comment, () => {
         // Go back to post
-        props.history.push("/post/" + postKey);
+        this.props.history.push("/post/" + this.state.post_key);
       });
     };
-    setPostReference(fire_post, data_post, onSuccessfullySetDocument);
+    setPostReference(this.fire_post, data_post, onSuccessfullySetDocument);
   };
 
-  return (
-    <div className="container">
-      <Navbar />
-      <div className="panel panel-default">
-        <br />
-        <div className="panel-heading">
-          <h3 className="panel-title">New Post</h3>
-        </div>
-        <div className="panel-body">
-          <form onSubmit={onSubmit}>
-            <div className="form-group">
-              <input
-                type="text"
-                className="form-control"
-                name="title"
-                value={title}
-                onChange={onChangeTitle}
-                placeholder="Title"
-              />
-            </div>
-            <div className="form-group">
-              <div className="border border-dark">
-                <TextEditor
-                  ref={refEditor}
-                  post_key={postKey}
-                  initialRichText={initialRichText}
+  render() {
+    const { title, post_key } = this.state;
+    return (
+      <div className="container">
+        <Navbar />
+        <div className="panel panel-default">
+          <br />
+          <div className="panel-heading">
+            <h3 className="panel-title">New Post</h3>
+          </div>
+          <div className="panel-body">
+            <form onSubmit={this.onSubmit}>
+              <div className="form-group">
+                <input
+                  type="text"
+                  className="form-control"
+                  name="title"
+                  value={title}
+                  onChange={this.onChangeTitle}
+                  placeholder="Title"
                 />
               </div>
-            </div>
-            <div>
-              <button type="submit" className="btn btn-bgn">
-                Submit
-              </button>
-              <Link to="/forum" className="btn btn-bgn ml-1">
-                Cancel
-              </Link>
-            </div>
-          </form>
+              <div className="form-group">
+                <div className="border border-dark">
+                  <TextEditor
+                    ref={this.refEditor}
+                    post_key={post_key}
+                    initialRichText={this.initialRichText}
+                  />
+                </div>
+              </div>
+              <div>
+                <button type="submit" className="btn btn-bgn">
+                  Submit
+                </button>
+                <Link to="/forum" className="btn btn-bgn ml-1">
+                  Cancel
+                </Link>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+}

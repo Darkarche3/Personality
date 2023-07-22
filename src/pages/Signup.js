@@ -108,7 +108,7 @@ export const Signup = () => {
     };
 
     const encryptPassword = () => {
-        var pass12 = AES.encrypt(password, password);
+        var pass12 = AES.encrypt(JSON.stringify({ password }), password);
         return pass12.toString();
     }
 

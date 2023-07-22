@@ -122,6 +122,19 @@ export const User = () => {
 };
 
 /**
+ * Checks if current user is an admin.
+ * 
+ * @returns { Boolean }
+ */
+export const isAdmin = () => {
+  if (User() == null) {
+    return false;
+  }
+
+  return User().username == "admin";
+}
+
+/**
  * Gets the posts collection.
  * @type { CollectionReference }
  */
