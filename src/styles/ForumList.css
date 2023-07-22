@@ -6,12 +6,32 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #e4ffc9;
-  color: #444c3c;
 }
+
+.panel-default{
+  border: 3px solid #444c3c;
+  border-radius: 10px;
+  background-color: lightgray;
+    
+}
+
+.panel-title{
+  padding: 10px;
+  font-size: xx-large;
+  color:#444c3c
+}
+  
+
+.btn{
+margin-bottom: 20px;
+margin-left: 550px;
+}
+
 .btn-bgn {
   background-image: linear-gradient(to bottom, #5a684b, #7d9169);
   color: #fff;
+  padding: 10px;
+  
 }
 .tablePosts thead tr {
   color: #fff;
@@ -100,17 +120,15 @@ code {
   margin:30px;
 }
 .pagination li a {
-  background-color: #e0edd3;
   font-weight: normal;
   color: #444c3c;
 }
 
 .page-item.disabled .page-link {
-  background-color: #e0edd3;
   font-weight: normal;
 }
 
 .page-item.active .page-link {
-  background-color: #59674b;
   font-weight: bold;
 }
+
