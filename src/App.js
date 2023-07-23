@@ -14,7 +14,7 @@ import { Marketplace } from './pages/Marketplace';
 import { Signup } from './pages/Signup';
 import { Login } from './pages/Login';
 import { ForumList } from './pages/ForumList';
-import { ForumPost } from './pages/ForumPost';
+import { Post } from './pages/Post';
 import { CreatePost } from './pages/CreatePost';
 import { EditForum } from './components/EditForum';
 
@@ -30,10 +30,10 @@ export const App = () => {
       <Route path="/contact" element={<Contact />} />
       <Route path="/faq" element={<Faq />} />
       <Route path="/marketplace" element={<Marketplace />} />
-      <Route path="/forum" element={<ForumList />} />
-      <Route path="/create" element={<CreatePost />} />
-      <Route path="/post/:id" element={<ForumPost />} />
-      <Route path="/edit/:postkey/:commentid" element={<EditForum />} />
+      <Route exact path="/forum" element={<ForumList />} />
+      <Route exact path="/create" element={<CreatePost />} />
+      <Route exact path="/post/:id" element={<Post />} />
+      <Route exact path="/edit/:postkey/:commentid" element={<EditForum />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/login" element={<Login />} />
     </Routes>
