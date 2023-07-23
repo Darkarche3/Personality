@@ -45,7 +45,10 @@ export class ForumPost extends Component {
   }
 
   // Keep comments' text and title up to date.
-  // This is achieved by having 1) the onSnapshot subscription above; 2) comment_array and title in state; 3) this callback modifying comment_array and title
+  // This is achieved by having 
+  // 1) the onSnapshot subscription above; 
+  // 2) comment_array and title in state; 
+  // 3) this callback modifying comment_array and title
   onPostDocumentUpdate = () => {
     // Update comments
     getComment(this.props.match.params.id, doc => {

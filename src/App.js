@@ -15,8 +15,8 @@ import { Signup } from './pages/Signup';
 import { Login } from './pages/Login';
 import { ForumList } from './pages/ForumList';
 import { Post } from './pages/Post';
-import { CreatePost } from './pages/CreatePost';
-import { EditForum } from './components/EditForum';
+import { Create } from './pages/Create';
+import { Edit } from './components/Edit';
 
 export const App = () => {
   return (
@@ -31,9 +31,9 @@ export const App = () => {
       <Route path="/faq" element={<Faq />} />
       <Route path="/marketplace" element={<Marketplace />} />
       <Route exact path="/forum" element={<ForumList />} />
-      <Route exact path="/create" element={<CreatePost />} />
+      <Route exact path="/create" element={<Create />} />
       <Route exact path="/post/:id" element={<Post />} />
-      <Route exact path="/edit/:postkey/:commentid" element={<EditForum />} />
+      <Route exact path="/edit/:postkey/:commentid" element={<Edit />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/login" element={<Login />} />
     </Routes>

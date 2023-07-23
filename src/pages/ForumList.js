@@ -23,7 +23,7 @@ import "../styles/ForumList.css";
 // The amount of characters the forum post text would be truncated to.
 export const TRUNCATION_LIMIT = 290;
 // The number of posts that can be seen in one page.
-export const PAGE_SIZE = 20;
+export const PAGE_SIZE = 15;
 
 export class ForumList extends Component {
   state = {
