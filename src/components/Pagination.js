@@ -8,13 +8,13 @@ export class PaginationComponent extends Component {
     return (
       <div className="pagination pagination-wrapper">
         <Pagination aria-label="Page navigation example">
-          <PaginationItem disabled={currentPage <= 0}>
+          {currentPage >= 1 && (<PaginationItem>
             <PaginationLink
               onClick={e => this.props.handlePageClick(e, currentPage - 1)}
-              previous
-              href="#"
-            />
-          </PaginationItem>
+              href="#">
+              &lsaquo;
+            </PaginationLink>
+          </PaginationItem>)}
 
           {[...Array(pagesCount)].map((page, i) => (
             <PaginationItem active={i === currentPage} key={i}>
@@ -27,13 +27,13 @@ export class PaginationComponent extends Component {
             </PaginationItem>
           ))}
 
-          <PaginationItem disabled={currentPage >= this.pagesCount - 1}>
+          {(currentPage <= this.pagesCount - 2) && <PaginationItem>
             <PaginationLink
               onClick={e => this.props.handlePageClick(e, currentPage + 1)}
-              next
-              href="#"
-            />
-          </PaginationItem>
+              next>
+              &rsaquo;
+            </PaginationLink>
+          </PaginationItem>}
         </Pagination>
       </div>
     );

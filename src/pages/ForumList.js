@@ -48,7 +48,7 @@ export class ForumList extends Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    //Get the posts now and subscribe to updates
+    // Get the posts now and subscribe to updates
     if (
       this.state.sortBy !== prevState.sortBy ||
       this.state.direction !== prevState.direction ||

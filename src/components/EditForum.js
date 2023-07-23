@@ -47,7 +47,6 @@ export class EditForum extends Component {
     // Get the rich text (I mean a string with HTML code) from the reference to TextEditor
     var plainText = this.refEditor.current.state.plainText;
     var richText = this.refEditor.current.state.valueHtml;
-    //var plainText = this.refEditor.current.state.plainText;
     // Send to Firebase
     e.preventDefault();
     // Get document with all comments, push new comment
