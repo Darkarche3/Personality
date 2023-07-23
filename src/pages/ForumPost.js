@@ -22,7 +22,7 @@ export class ForumPost extends Component {
     isLoading: true,
     title: ""
   };
-  unsubscribe = null;
+  unsubscribe = () => { return; };
 
   componentDidMount() {
     getComment(this.props.match.params.id, doc => {
@@ -117,7 +117,7 @@ export class ForumPost extends Component {
           <div className="panel panel-default">
             <br />
             <div className="panel-heading">
-              <Link to="/">
+              <Link to="/forum">
                 <button className="btn btn-bgn ml-0">
                   &lt;&lt; Back to Post List
                 </button>
