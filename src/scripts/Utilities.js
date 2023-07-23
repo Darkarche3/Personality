@@ -152,7 +152,7 @@ export const timeDifference = (previous) => {
   var msPerMonth = msPerDay * 30;
   var msPerYear = msPerDay * 365;
   const current = Date.now();
-  var elapsed = current - previous;
+  var elapsed = current - previous - 28800000;
     
   if (elapsed < msPerMinute) {
     return Math.round(elapsed / 1000) + " seconds ago";
