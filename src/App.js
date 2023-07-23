@@ -30,12 +30,12 @@ export const App = () => {
       <Route path="/contact" element={<Contact />} />
       <Route path="/faq" element={<Faq />} />
       <Route path="/marketplace" element={<Marketplace />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/login" element={<Login />} />
       <Route exact path="/forum" element={<ForumList />} />
       <Route exact path="/create" element={<Create />} />
       <Route exact path="/post/:id" element={<Post />} />
       <Route exact path="/edit/:postkey/:commentid" element={<Edit />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/login" element={<Login />} />
     </Routes>
   );
 };

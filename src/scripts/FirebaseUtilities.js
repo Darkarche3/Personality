@@ -131,8 +131,8 @@ export const isAdmin = () => {
     return false;
   }
 
-  return User().username == "admin";
-}
+  return User().username === "admin";
+};
 
 /**
  * Gets the posts collection.
