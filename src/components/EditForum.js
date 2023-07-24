@@ -9,6 +9,7 @@ import {
   updateComment
 } from "../scripts/FirebaseUtilities";
 import { doc, serverTimestamp } from "firebase/firestore";
+import { Navbar } from "./Navbar";
 
 export class EditForum extends Component {
   state = {
@@ -83,49 +84,52 @@ export class EditForum extends Component {
   render() {
     const { title, post_key, richText } = this.state;
     return (
-      <div className="container">
-        <div className="panel panel-default">
-          <br />
-          <div className="panel-heading">
-            {this.editingPost && <h3 className="panel-title">Edit Post</h3>}
-            {!this.editingPost && <h3 className="panel-title">Edit Comment</h3>}
-          </div>
-          <br />
-          <div className="panel-body">
-            <form onSubmit={this.onSubmit}>
-              {this.editingPost && (
+      <div>
+        <Navbar />
+        <div className="container">
+          <div className="panel panel-default">
+            <br />
+            <div className="panel-heading">
+              {this.editingPost && <h3 className="panel-title">Edit Post</h3>}
+              {!this.editingPost && <h3 className="panel-title">Edit Comment</h3>}
+            </div>
+            <br />
+            <div className="panel-body">
+              <form onSubmit={this.onSubmit}>
+                {this.editingPost && (
+                  <div className="form-group">
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="title"
+                      value={title}
+                      onChange={this.onChangeTitle}
+                      placeholder="Title"
+                    />
+                  </div>
+                )}
                 <div className="form-group">
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="title"
-                    value={title}
-                    onChange={this.onChangeTitle}
-                    placeholder="Title"
-                  />
+                  <div className="border border-dark">
+                    <TextEditor
+                      ref={this.refEditor}
+                      post_key={post_key}
+                      initialRichText={richText}
+                    />
+                  </div>
                 </div>
-              )}
-              <div className="form-group">
-                <div className="border border-dark">
-                  <TextEditor
-                    ref={this.refEditor}
-                    post_key={post_key}
-                    initialRichText={richText}
-                  />
+                <div>
+                  <button type="submit" class="inline">
+                    Submit
+                  </button>
+                  <Link
+                    to={`/post/${this.props.match.params.postkey}`}
+                    class="inline"
+                  >
+                    Cancel
+                  </Link>
                 </div>
-              </div>
-              <div>
-                <button type="submit" className="btn btn-bgn">
-                  Submit
-                </button>
-                <Link
-                  to={`/post/${this.props.match.params.postkey}`}
-                  className="btn btn-bgn ml-1"
-                >
-                  Cancel
-                </Link>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
         </div>
       </div>

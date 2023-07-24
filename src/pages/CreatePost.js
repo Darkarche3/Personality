@@ -9,6 +9,7 @@ import {
 } from "../scripts/FirebaseUtilities";
 import { serverTimestamp } from "firebase/firestore";
 import { Navbar } from "../components/Navbar";
+import "../styles/CreatePost.css"
 
 export class CreatePost extends Component {
   state = {
@@ -76,46 +77,48 @@ export class CreatePost extends Component {
   render() {
     const { title, post_key } = this.state;
     return (
-      <div className="container">
-        <Navbar />
-        <div className="panel panel-default">
-          <br />
-          <div className="panel-heading">
-            <h3 className="panel-title">New Post</h3>
-          </div>
-          <div className="panel-body">
-            <form onSubmit={this.onSubmit}>
-              <div className="form-group">
-                <input
-                  type="text"
-                  className="form-control"
-                  name="title"
-                  value={title}
-                  onChange={this.onChangeTitle}
-                  placeholder="Title"
-                />
-              </div>
-              <div className="form-group">
-                <div className="border border-dark">
-                  <TextEditor
-                    ref={this.refEditor}
-                    post_key={post_key}
-                    initialRichText={this.initialRichText}
+      <div>
+      <Navbar />
+        <div className="container">
+          <div className="panel panel-default">
+            <br />
+            <div className="panel-heading">
+              <h3 className="panel-title">New Post</h3>
+            </div>
+            <div className="panel-body">
+              <form onSubmit={this.onSubmit}>
+                <div className="form-group">
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="title"
+                    value={title}
+                    onChange={this.onChangeTitle}
+                    placeholder="Title"
                   />
                 </div>
-              </div>
-              <div>
-                <button type="submit" className="btn btn-bgn">
-                  Submit
-                </button>
-                <Link to="/forum" className="btn btn-bgn ml-1">
-                  Cancel
-                </Link>
-              </div>
-            </form>
+                <div className="form-group">
+                  <div className="border border-dark">
+                    <TextEditor
+                      ref={this.refEditor}
+                      post_key={post_key}
+                      initialRichText={this.initialRichText}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <button type="submit" class="inline">
+                    Submit
+                  </button>
+                  <Link to="/forum" class="inline">
+                    Cancel
+                  </Link>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>
     );
   }
-}
+};

@@ -114,55 +114,57 @@ export class ForumPost extends Component {
   render() {
     const { isLoading, comment_array, post, post_key, key, showReply } = this.state;
     return (
-      <div className="container">
+      <div>
         <Navbar />
-        <div>
-          <div className="panel panel-default">
-            <br />
-            <div className="panel-heading">
-              <Link to="/forum">
-                <button className="btn btn-bgn ml-0">
-                  &lt;&lt; Back to Post List
-                </button>
-              </Link>
+        <div className="container">
+          <div>
+            <div className="panel panel-default">
               <br />
-              <br />
-            </div>
-            <div className="panel-body">
-              {isLoading && <div className="spinner" />}
-              {comment_array.map(comment => (
-                <Comment
-                  key={comment.id}
-                  comment={comment}
-                  post_title={post.title}
-                  post_key={post_key}
-                  post_status={post.status}
-                  deleteCallback={this.deleteCallback}
-                  toggleCloseCallback={this.toggleCloseCallback}
-                />
-              ))}
-              <div>
-                {!showReply && post.status === "open" && (
-                  <button
-                    onClick={() => this.reply(key)}
-                    className="btn btn-bgn ml-0"
-                  >
-                    Reply
+              <div className="panel-heading">
+                <Link to="/forum">
+                  <button className="btn btn-bgn ml-0">
+                    &lt;&lt; Back to Post List
                   </button>
-                )}
+                </Link>
+                <br />
+                <br />
               </div>
+              <div className="panel-body">
+                {isLoading && <div className="spinner" />}
+                {comment_array.map(comment => (
+                  <Comment
+                    key={comment.id}
+                    comment={comment}
+                    post_title={post.title}
+                    post_key={post_key}
+                    post_status={post.status}
+                    deleteCallback={this.deleteCallback}
+                    toggleCloseCallback={this.toggleCloseCallback}
+                  />
+                ))}
+                <div>
+                  {!showReply && post.status === "open" && (
+                    <button
+                      onClick={() => this.reply(key)}
+                      className="btn btn-bgn ml-0"
+                    >
+                      Reply
+                    </button>
+                  )}
+                </div>
+              </div>
+              <div className="panel-footer" />
             </div>
-            <div className="panel-footer" />
           </div>
-        </div>
-        <br />
-        <div>
-          {showReply && (
-            <Reply
-              post_key={this.props.match.params.id}
-              toggleShowReply={() => this.toggleShowReplyComment()}
-            />
-          )}
+          <br />
+          <div>
+            {showReply && (
+              <Reply
+                post_key={this.props.match.params.id}
+                toggleShowReply={() => this.toggleShowReplyComment()}
+              />
+            )}
+          </div>
         </div>
       </div>
     );
