@@ -123,7 +123,7 @@ export class ForumPost extends Component {
               <div className="panel-heading">
                 <Link to="/forum">
                   <button className="btn btn-bgn ml-0">
-                    &lt;&lt; Back to Post List
+                    &lt;&lt; Back to Forum
                   </button>
                 </Link>
                 <br />

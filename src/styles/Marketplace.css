@@ -52,6 +52,7 @@ body {
 
 .outer {
   margin-bottom: 1.5rem;
+  padding: 10px;
 }
 
 @media (min-width: 1024px) {

@@ -59,7 +59,7 @@ export const Navbar = () => {
         )}
         {User() != null && (
           <>
-            <Link to="/profile">{User().username}</Link>
+            <Link to="">{User().username}</Link>
             <SignoutButton />
           </>
         )}
