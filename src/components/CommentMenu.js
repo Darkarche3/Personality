@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { User } from "../scripts/FirebaseUtilities";
 import { Link } from "react-router-dom";
+import "../styles/CommentMenu.css"
 
 export default class CommentMenu extends Component {
   toggleClose() {
@@ -20,7 +21,7 @@ export default class CommentMenu extends Component {
       this.props.author === User().username && (
         <div className="postmenu small text-muted bottom-right">
           <Link
-            to={"/edit/" + post_key + "/" + this.props.comment_id}
+            to={"/edit/" + post_key + "/" + this.props.comment_id} className="edit"
           >
             edit
           </Link>
