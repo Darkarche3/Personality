@@ -2,9 +2,9 @@ import React from "react";
 import { cta } from "./assets";
 import { SlGraduation } from "react-icons/sl";
 import { SlPeople } from "react-icons/sl";
-import {CgAwards} from "react-icons/cg"
+import { CgAwards } from "react-icons/cg"
 import "../styles/Achievement.css"
-import {SlOrganization} from 'react-icons/sl'
+import { SlOrganization } from 'react-icons/sl'
 
 
 

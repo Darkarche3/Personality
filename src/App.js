@@ -3,7 +3,7 @@ import './App.css';
 import { Route, Routes } from "react-router-dom";
 import { PageLoader } from './components/PageLoader';
 import { Admin } from './pages/Admin';
-import { Home } from './components/Home';
+import { Home } from './pages/Home';
 import { NotFound } from './pages/NotFound';
 import { Profile } from './pages/Profile';
 import { Careers } from './pages/Careers';
