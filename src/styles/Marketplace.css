@@ -70,11 +70,6 @@ body {
     0 10px 20px -2px black;
 }
 
-@media (prefers-color-scheme: dark) {
-  .imgblock {
-    background-color: #4b5563;
-  }
-}
 
 .block{
   display: flex;
@@ -92,12 +87,7 @@ body {
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
-@media (prefers-color-scheme: dark) {
-  .image {
-    box-shadow: rgba(0,0,0,1) 0px 10px 15px -3px, rgba(0,0,0,1) 0px 4px 6px -2px;
-    opacity: .2;
-  }
-}
+
 
 .b{
   width: 100%;
@@ -147,14 +137,7 @@ body {
   margin-bottom: 1rem;
   color: black;
 }
-
-
-@media (prefers-color-scheme: dark) {
-  .f {
-    color: #d1d5db;
-  }
-}
-
+  
 .g{
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
@@ -203,21 +186,7 @@ body {
     background-color:#1d4ed8;
     box-shadow: rgba(59,113,202,0.3) 0px 8px 9px -4px, rgba(59,113,202,0.2) 0px 4px 18px 0px;
 }
-@media (prefers-color-scheme: dark) {
-    .h {
-        box-shadow: rgba(59,113,202,0.5) 0px 4px 9px -4px;
-    }
-    .h:hover {
-        box-shadow: rgba(59,113,202,0.2) 0px 8px 9px -4px, rgba(59,113,202,0.1) 0px 4px18 px -4 px;
-    }
-    .h:focus {
-        box-shadow: rgba(59,113,202,0.2) px8 px9 px-4 px ,rgba(59 ,113 ,202 ,0 .1 ) px4 px18 px-4 px ;
-    }
-    .h.active {
-        box-shadow :rgba (59 ,113 ,202 ,0 .2 ) px8 px9 px-4 px ,rgba (59 ,113 ,202 ,0 .1 ) px4 px18 px-4 px ;
-    }
-}
- 
+
 
 
 
