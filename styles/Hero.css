@@ -1,0 +1,36 @@
+.a {
+  width: 100%;
+  background-color: white;
+  padding-top: 24px;
+}
+
+.b {
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  background-color: white;
+  padding-top: 24px;
+}
+
+.d {
+  padding-top: 2px;
+  font-size: 5rem;
+  color: #20b486;
+  font-weight: large;
+}
+
+.words {
+  padding-top: 0.5rem;
+  font-size: 10rem;
+  padding-left: 70px;
+}
+
+.g {
+  color: #20b486;
+}
+
+.f {
+    height: 100%;
+    width: 100%;
+    display: flex;
+}

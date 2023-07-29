@@ -1,0 +1,16 @@
+.container {
+  max-width: 1200px;
+  padding: 0 15px;
+  margin: 0 auto;
+  
+}
+
+p {    
+    margin: 0px 0px 0px 0px;
+    font-weight: bolder;
+    font-size: 15px;
+    color: black;
+    padding: 0rem;
+    
+}
+

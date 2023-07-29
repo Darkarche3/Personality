@@ -1,0 +1,134 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.panel-default{
+  border: 3px solid #444c3c;
+  border-radius: 10px;
+  background-color: lightgray;
+    
+}
+
+.panel-title{
+  padding: 10px;
+  font-size: xx-large;
+  color:#444c3c
+}
+  
+
+.btn{
+margin-bottom: 20px;
+margin-left: 550px;
+}
+
+.btn-bgn {
+  background-image: linear-gradient(to bottom, #5a684b, #7d9169);
+  color: #fff;
+  padding: 10px;
+  
+}
+.tablePosts thead tr {
+  color: #fff;
+  font-weight: normal;
+}
+.tablePosts th {
+  border-top: 0;
+  padding: 0.5rem;
+}
+.tablePosts tr {
+  border-top-color: #ffffff;
+  border-bottom-color: #608f00;
+  color: #444c3c;
+  border-top: 1px solid transparent;
+  border-top-color: transparent;
+  border-bottom: 1px solid green;
+  border-bottom-color: green;
+}
+.tablePosts td {
+  border-top: 0;
+  padding: 0.75rem;
+  vertical-align: middle;
+}
+.tablePosts tbody tr.alt1:hover,
+tr.alt2:hover {
+  background-color: #f6f4d0;
+}
+
+.tablePosts td .material-icons {
+  /* I hope this holds. The account_circle icon is not centered? */
+  margin-left: 4px;
+}
+
+.table a {
+  color: #444c3c;
+}
+.table a {
+  font-weight: bold;
+}
+.table a:hover {
+  color: #000000;
+}
+
+.tablePosts {
+  background-color: #59674b;
+  background-image: linear-gradient(
+    to bottom,
+    #b5c1a9 0%,
+    #7f936b 2px,
+    #59674b 100%
+  );
+  background-repeat: repeat-x;
+}
+.tablePosts {
+  margin-bottom: 4px;
+  padding: 5px;
+  clear: both;
+  border-radius: 7px;
+}
+
+.postTitle:hover {
+  text-decoration: underline;
+  text-decoration-line: underline;
+  text-decoration-style: solid;
+  text-decoration-color: currentcolor;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+/* PostList component*/
+.alt1 {
+  background: #e0edd3;
+}
+.alt2 {
+  background: #ffffff;
+}
+.pagination .pagination-wrapper {
+  overflow-x:auto;
+}
+
+.pagination {
+  justify-content: center;
+  margin:30px;
+}
+.pagination li a {
+  font-weight: normal;
+  color: #444c3c;
+}
+
+.page-item.disabled .page-link {
+  font-weight: normal;
+}
+
+.page-item.active .page-link {
+  font-weight: bold;
+}
+
