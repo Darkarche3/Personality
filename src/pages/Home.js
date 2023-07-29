@@ -1,23 +1,20 @@
 import React from 'react';
 import '../App.css';
 import { Navbar } from "../components/Navbar";
-import { User } from '../scripts/FirebaseUtilities';
+import Hero from '../components/Hero';
+import Companies from '../components/Companies';
+import Achievement from '../components/Achievement';
 
 // The home page.
 export const Home = () => {
-
-    return (
+  return (
+    <div >
       <div>
         <Navbar />
-  
-        <div className="Home">
-          {User() == null && (
-            <h1>WELCOME TO PERSONALITY!!!!!</h1>
-          )}
-          {User() != null && (
-              <h1>Welcome to Personality, {User().name}!</h1>
-          )}
-        </div>
+        <Hero />
+        <Companies />
+        <Achievement />
       </div>
-    );
-  };  
+    </div>
+  );
+};  
