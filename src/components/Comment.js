@@ -5,6 +5,7 @@ import {
   timeDifference
 } from "../scripts/Utilities";
 import CommentMenu from "./CommentMenu";
+import "../styles/Comment.css";
 
 class Comment extends Component {
   toggleCloseCallback = () => {
