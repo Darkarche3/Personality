@@ -1,5 +1,4 @@
 import React from 'react';
-import { Navbar } from "../components/Navbar";
 import { Collapse } from 'antd';
 import "../styles/Faq.css";
 
@@ -8,7 +7,6 @@ const { Panel } = Collapse;
 export const Faq = () => {
     return (
         <div>
-            <Navbar/>
             <div className='container'>
                 <h2>FAQ</h2>
                 <Collapse accordion defaultActiveKey={['1']}>

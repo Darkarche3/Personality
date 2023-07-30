@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import Navbar from "../components/Navbar";
 import { PaginationComponent } from "../components/Pagination";
 import {
   truncate,
@@ -112,7 +111,6 @@ export class ForumList extends Component {
     const { isLoading, currentPage, posts } = this.state;
     return (
       <div>
-        <Navbar />
         <div className="container">
           <div className="panel-default">
             <br />

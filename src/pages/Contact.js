@@ -1,7 +1,6 @@
 import React from "react";
 import { useState } from "react";
 import "../styles/Contact.css";
-import { Navbar } from "../components/Navbar";
 import { db } from "../Firebase";
 import { ref, push, set } from "firebase/database";
 import { User } from "../scripts/FirebaseUtilities";
@@ -78,7 +77,6 @@ export const Contact = () => {
 
   return (
     <div>
-      <Navbar />
       <div className="contact-form">
         <h2>Contact</h2>
         <div className="contact-container">

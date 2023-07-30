@@ -1,6 +1,5 @@
 import React from 'react';
 import { useState } from 'react';
-import { Navbar } from "../components/Navbar";
 import { db } from "../Firebase";
 import { ref, set, child, get } from "firebase/database";
 import { AES } from "crypto-js";
@@ -112,7 +111,6 @@ export const Signup = () => {
 
   return (
     <div>
-      <Navbar />
       <div className='signup-form'>
         <h2>Sign Up</h2>
         <div className='signup-container'>

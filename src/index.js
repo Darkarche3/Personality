@@ -3,15 +3,15 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { App } from './App';
 import { reportWebVitals } from './reportWebVitals';
+import { Navbar } from "./components/Navbar";
 import './index.css';
-import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
-
 
 // Routes to all the different webpages
 const root = createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
+        <Navbar />
         <App />
     </BrowserRouter>
   </React.StrictMode>
