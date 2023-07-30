@@ -107,10 +107,10 @@ export class CreatePost extends Component {
                   </div>
                 </div>
                 <div>
-                  <button type="submit" class="inline">
+                  <button type="submit" className="inline">
                     Submit
                   </button>
-                  <Link to="/forum" class="inline">
+                  <Link to="/forum" className="inline">
                     Cancel
                   </Link>
                 </div>

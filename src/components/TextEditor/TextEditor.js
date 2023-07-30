@@ -38,7 +38,6 @@ const rules = [
         img: "image"
       };
       const type = BLOCK_TAGS[el.tagName.toLowerCase()];
-      //console.log('deserialize block. type:', type, el.tagName.toLowerCase())
       if (type) {
         if (type === "link") {
           var obj = {
@@ -65,7 +64,6 @@ const rules = [
       }
     },
     serialize(obj, children) {
-      //console.log("serialize block/inline. obj.object:", obj.object, obj.toJSON());
       if (obj.object === "inline") {
         if (obj.type === "link") {
           //this is what gets stored in firebase
@@ -73,7 +71,6 @@ const rules = [
         }
       }
       if (obj.object === "block") {
-        //console.log("  serialize block. obj.type:", obj.type, obj.toJSON());
         switch (obj.type) {
           case "code":
             return (
@@ -297,7 +294,7 @@ class TextEditor extends React.Component {
             {this.renderBlockButton("bulleted-list", "format_list_bulleted")}
             {/* Insert link */}
             <Button
-              active={this.hasLinks()}
+              isActive={this.hasLinks()}
               onMouseDown={event => this.onClickLink(event, "looks_two")}
             >
               <Icon title="insert_link">insert_link</Icon>
@@ -309,7 +306,7 @@ class TextEditor extends React.Component {
             {/* Upload image */}
             <div className="element">
               <Icon
-                title="Insert image url"
+                title="Cloud upload"
                 onClick={this._handleIconClick}
                 style={{ cursor: "pointer" }}
               >
@@ -353,7 +350,7 @@ class TextEditor extends React.Component {
               onChange={this.onChange}
               onKeyDown={this.onKeyDown}
               renderMark={this.renderMark}
-              renderNode={this.renderBlock}
+              renderBlock={this.renderBlock}
             />
           </TextArea>
         </EditorContainer>
@@ -569,7 +566,6 @@ class TextEditor extends React.Component {
     event.preventDefault();
     const { editor } = this;
     const { value } = editor;
-    //const { document } = value;
     const hasLinks = this.hasLinks();
     if (hasLinks) {
       editor.command(unwrapLink);
