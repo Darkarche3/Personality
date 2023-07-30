@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Reply from "../components/Reply";
 import Comment from "../components/Comment";
-import Navbar from "../components/Navbar";
 import {
   fire_posts,
   invalidateComment,
@@ -115,7 +114,6 @@ export class ForumPost extends Component {
     const { isLoading, comment_array, post, post_key, key, showReply } = this.state;
     return (
       <div>
-        <Navbar />
         <div className="container">
           <div>
             <div className="panel panel-default">

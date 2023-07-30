@@ -1,3 +1,4 @@
+import React from 'react';
 import React, { useRef }from 'react';
 import { Navbar } from "../components/Navbar";
 import '../styles/Marketplace.css';
@@ -32,7 +33,6 @@ export const Marketplace = () => {
 
     return (
         <div>
-            <Navbar />
             <div className="container md\:px-6">
                 <section className="sect">
                     <h2 className="article">

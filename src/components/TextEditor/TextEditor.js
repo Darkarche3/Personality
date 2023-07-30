@@ -293,18 +293,18 @@ class TextEditor extends React.Component {
             {this.renderBlockButton("numbered-list", "format_list_numbered")}
             {this.renderBlockButton("bulleted-list", "format_list_bulleted")}
             {/* Insert link */}
-            <Button
+            {/* <Button
               isActive={this.hasLinks()}
               onMouseDown={event => this.onClickLink(event, "looks_two")}
             >
               <Icon title="insert_link">insert_link</Icon>
-            </Button>
+            </Button> */}
             {/* Insert image URL */}
-            <Button onMouseDown={this.onClickImageUrl}>
+            {/* <Button onMouseDown={this.onClickImageUrl}>
               <Icon title="Insert image url">image</Icon>
-            </Button>
+            </Button> */}
             {/* Upload image */}
-            <div className="element">
+            {/* <div className="element">
               <Icon
                 title="Cloud upload"
                 onClick={this._handleIconClick}
@@ -322,9 +322,9 @@ class TextEditor extends React.Component {
                 style={{ display: "none", width: "auto", height: "auto" }}
                 onChange={event => this.onChangeInput(event)}
               />
-            </div>
+            </div> */}
             {/* Progress bar of Upload image */}
-            {uploadProgress < 100 && (
+            {/* {uploadProgress < 100 && (
               <Progress
                 animated
                 value={uploadProgress}
@@ -334,7 +334,7 @@ class TextEditor extends React.Component {
               >
                 {uploadProgress.toFixed(0)}
               </Progress>
-            )}
+            )} */}
           </Toolbar>
           <TextArea>
             <Editor

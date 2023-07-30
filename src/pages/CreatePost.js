@@ -8,7 +8,6 @@ import {
   setPostReference
 } from "../scripts/FirebaseUtilities";
 import { serverTimestamp } from "firebase/firestore";
-import { Navbar } from "../components/Navbar";
 import "../styles/CreatePost.css"
 
 export class CreatePost extends Component {
@@ -78,7 +77,6 @@ export class CreatePost extends Component {
     const { title, post_key } = this.state;
     return (
       <div>
-      <Navbar />
         <div className="container">
           <div className="panel panel-default">
             <br />

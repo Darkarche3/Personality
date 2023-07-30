@@ -9,7 +9,6 @@ import {
   updateComment
 } from "../scripts/FirebaseUtilities";
 import { doc, serverTimestamp } from "firebase/firestore";
-import { Navbar } from "./Navbar";
 
 export class EditForum extends Component {
   state = {
@@ -85,7 +84,6 @@ export class EditForum extends Component {
     const { title, post_key, richText } = this.state;
     return (
       <div>
-        <Navbar />
         <div className="container">
           <div className="panel panel-default">
             <br />
