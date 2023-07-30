@@ -111,9 +111,7 @@ export class ForumList extends Component {
     const { isLoading, currentPage, posts } = this.state;
     return (
       <div>
-        <div className="container">
-        <Navbar />
-        
+        <div className="container"> 
           <div className="panel-default">
             <br />
             <div className="panel-heading">
