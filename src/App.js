@@ -14,6 +14,9 @@ import { Create } from './pages/Create';
 import { Edit } from './components/Edit';
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import Student from './pages/Student';
+import Nus from './pages/Nus';
+import { Ib } from './pages/Ib';
+
 export const App = () => {
   return (
     <Routes>
@@ -29,6 +32,8 @@ export const App = () => {
       <Route exact path="/post/:id" element={<Post />} />
       <Route exact path="/edit/:postkey/:commentid" element={<Edit />} />
       <Route exact path="/student" element={<Student />} />
+      <Route exact path="/nus" element={<Nus />} />
+      <Route exact path="/ib" element={<Ib />} />
     </Routes>
   );
 };
