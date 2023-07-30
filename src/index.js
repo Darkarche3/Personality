@@ -4,6 +4,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { App } from './App';
 import { reportWebVitals } from './reportWebVitals';
 import './index.css';
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
+
 
 // Routes to all the different webpages
 const root = createRoot(document.getElementById('root'));
