@@ -13,7 +13,7 @@ import { Post } from './pages/Post';
 import { Create } from './pages/Create';
 import { Edit } from './components/Edit';
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
-
+import Student from './pages/Student';
 export const App = () => {
   return (
     <Routes>
@@ -28,6 +28,7 @@ export const App = () => {
       <Route exact path="/create" element={<Create />} />
       <Route exact path="/post/:id" element={<Post />} />
       <Route exact path="/edit/:postkey/:commentid" element={<Edit />} />
+      <Route exact path="/student" element={<Student />} />
     </Routes>
   );
 };
