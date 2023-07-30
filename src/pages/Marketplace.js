@@ -1,24 +1,6 @@
 import React, { useRef }from 'react';
 import '../styles/Marketplace.css';
 
-const aquaticCreatures = [
-    { label: 'Student', value: "https://www.bing.com/" },
-    { label: 'International Business Management', value: 'Dolphin' },
-    { label: 'NUS', value: 'Whale' },
-    { label: 'Octopus', value: 'Octopus' },
-    { label: 'Crab', value: 'Crab' },
-    { label: 'Lobster', value: 'Lobster' },
-];
-
-aquaticCreatures.forEach((creature) => {
-    const link = document.createElement('a');
-    link.href = "/" + creature.value + ".js";
-    link.textContent = creature.label;
-    document.body.appendChild(link);
-});
-
-
-
 export const Marketplace = () => {
     const selectRef = useRef(null);
 
@@ -38,11 +20,11 @@ export const Marketplace = () => {
                     </h2>
                     <div>
                         <select ref={selectRef}>
-                            <option value="/student">File 1</option>
-                            <option value="src/pages/Student">File 2</option>
-                            <option value="src/pages/Student">File 3</option>
+                            <option value="/student">Student</option>
+                            <option value="/nus">NUS</option>
+                            <option value="/ib">International Business</option>
                         </select>
-                        <button onClick={handleButtonClick}>Go</button>
+                        <button className="button" onClick={handleButtonClick}>Go</button>
                     </div>
 
                     <div className="outermost">
