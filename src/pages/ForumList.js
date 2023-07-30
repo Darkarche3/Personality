@@ -18,6 +18,7 @@ import {
   query
 } from "firebase/firestore";
 import "../styles/ForumList.css";
+import Navbar from "../components/Navbar";
 // The amount of characters the forum post text would be truncated to.
 export const TRUNCATION_LIMIT = 30;
 // The number of posts that can be seen in one page.
