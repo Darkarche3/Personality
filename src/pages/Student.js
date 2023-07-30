@@ -1,35 +1,16 @@
-import React, { useRef }from 'react';
-import { Navbar } from "../components/Navbar";
-import '../styles/Marketplace.css';
+import React from 'react'
+import Navbar from '../components/Navbar'
+import Select from 'react-select'
 
-const aquaticCreatures = [
-    { label: 'Student', value: "https://www.bing.com/" },
-    { label: 'International Business Management', value: 'Dolphin' },
-    { label: 'NUS', value: 'Whale' },
-    { label: 'Octopus', value: 'Octopus' },
-    { label: 'Crab', value: 'Crab' },
-    { label: 'Lobster', value: 'Lobster' },
-];
-
-aquaticCreatures.forEach((creature) => {
-    const link = document.createElement('a');
-    link.href = "/" + creature.value + ".js";
-    link.textContent = creature.label;
-    document.body.appendChild(link);
-});
-
-
-
-export const Marketplace = () => {
-    const selectRef = useRef(null);
-
-    const handleButtonClick = () => {
-        const selectedValue = selectRef.current.value;
-        if (selectedValue) {
-            window.location.href = selectedValue;
-        }
-    };
-
+const Student = () => {
+    const aquaticCreatures = [
+        { label: 'Student', value: 'Shark' },
+        { label: 'International Business Management', value: 'Dolphin' },
+        { label: 'NUS', value: 'Whale' },
+        { label: 'Octopus', value: 'Octopus' },
+        { label: 'Crab', value: 'Crab' },
+        { label: 'Lobster', value: 'Lobster' },
+    ];
     return (
         <div>
             <Navbar />
@@ -39,44 +20,13 @@ export const Marketplace = () => {
                         Marketplace
                     </h2>
                     <div>
-                        <select ref={selectRef}>
-                            <option value="/student">File 1</option>
-                            <option value="src/pages/Student">File 2</option>
-                            <option value="src/pages/Student">File 3</option>
-                        </select>
-                        <button onClick={handleButtonClick}>Go</button>
+                        <Select
+                            options={aquaticCreatures}
+                            onChange={opt => console.log(opt.label, opt.value)}
+                        />
                     </div>
 
                     <div className="outermost">
-                        <div className="outer">
-                            <div
-                                className="imgblock">
-                                <div className="block">
-                                    <div
-                                        className="image">
-                                        <img src="https://images.template.net/wp-content/uploads/2017/03/17114828/International-Business-Management-Sample-Resume.jpg" className="b" alt="" />
-                                        <a href="#!">
-                                            <div
-                                                className="c">
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div className="d">
-                                    <h5 className="e">International Business Management Resume Sample</h5>
-                                    <p className="f">
-                                        <small>Added <u>13.01.2022</u></small>
-                                    </p>
-                                    <p className="g">
-                                        For careers in international Business
-                                    </p>
-                                    <a href="https://www.template.net/business/resume/simple-business-resume/" data-te-ripple-init data-te-ripple-color="light"
-                                        className="h">Read
-                                        more</a>
-                                </div>
-                            </div>
-                        </div>
-
                         <div className="outer">
                             <div
                                 className="imgblock">
@@ -141,5 +91,7 @@ export const Marketplace = () => {
 
             </div>
         </div>
-    );
-};
+    )
+}
+
+export default Student
