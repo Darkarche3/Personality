@@ -3,7 +3,7 @@ import { App } from './App';
 import { BrowserRouter } from 'react-router-dom';
 
 
-test('renders learn react link', () => {
+test('renders website name', () => {
   render(
     <BrowserRouter>
       <App />

@@ -16,9 +16,6 @@ import { Student } from './pages/Student';
 import { Ib } from './pages/Ib';
 import { Nus } from './pages/Nus';
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
-import Student from './pages/Student';
-import Nus from './pages/Nus';
-import { Ib } from './pages/Ib';
 
 export const App = () => {
   return (
