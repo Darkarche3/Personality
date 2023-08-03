@@ -10,7 +10,7 @@ export const SignoutButton = () => {
   }
 
   return (
-    <button className="button__logout" onClick={handleSignout}>
+    <button className="button__logout" onClick={handleSignout} data-testid="signout-button">
       Sign Out
     </button>
   );

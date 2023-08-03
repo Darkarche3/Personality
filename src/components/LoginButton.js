@@ -5,7 +5,7 @@ export const LoginButton = () => {
     window.location.href = "/login";
   }
   return (
-    <button className="button__login" onClick={click}>
+    <button className="button__login" onClick={click} data-testid="login-button">
       Log In
     </button>
   );

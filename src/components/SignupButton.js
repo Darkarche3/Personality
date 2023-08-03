@@ -6,7 +6,7 @@ export const SignupButton = () => {
   }
   
   return (
-    <button className="button__sign-up" onClick={click}>
+    <button className="button__sign-up" onClick={click} data-testid="signup-button">
       Sign Up
     </button>
   );

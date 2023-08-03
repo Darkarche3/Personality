@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
+import { Alert } from "reactstrap";
 import { db } from "../Firebase";
 import { ref, child, get } from "firebase/database";
 import { AES, enc } from "crypto-js";
@@ -10,6 +11,7 @@ export const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [keepLoggedIn, setKeepLoggedIn] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -31,7 +33,18 @@ export const Login = () => {
     setKeepLoggedIn(!keepLoggedIn);
   };
 
+  const isEmptyOrSpaces = (str) => {
+    return str === null || str.match(/^ *$/) !== null;
+  };
+
   const AuthenticateUser = () => {
+    setErrorMsg("");
+
+    if (isEmptyOrSpaces(username) || isEmptyOrSpaces(password)) {
+      setErrorMsg("You cannot leave any field empty.");
+      return;
+    };
+
     const dbRef = ref(db);
 
     get(child(dbRef, "UsersList/" + username)).then((snapshot) => {
@@ -40,10 +53,10 @@ export const Login = () => {
         if (dbPass === password) {
           login(snapshot.val());
         } else {
-          alert("Username or password is invalid.")
+          setErrorMsg("Username or password is invalid.")
         }
       } else {
-          alert("User does not exist.");
+          setErrorMsg("User does not exist.");
       }
     });
   };
@@ -67,19 +80,20 @@ export const Login = () => {
   return (
     <div>
       <div className='login-form'>
-        <h2>Log In</h2>
+        <h2 data-testid="login">Log In</h2>
+        {errorMsg && <Alert color="danger">{errorMsg}</Alert>}
         <div className='login-container'>
           <label htmlFor="username">Username</label>
           <input type="text" placeholder="Username" id="username"
-            value={username} onChange={(e) => handleInputChange(e)} />
+            value={username} onChange={(e) => handleInputChange(e)} data-testid="login-username" />
           <label htmlFor="password">Password</label>
           <input type="password" placeholder="Password" id="password" 
-            value={password} onChange={(e) => handleInputChange(e)} />
+            value={password} onChange={(e) => handleInputChange(e)} data-testid="login-password" />
           <input type="checkbox" id="keepLoggedIn"
             value={keepLoggedIn} onChange={handleKeepLoggedInChange} />
           <label htmlFor="keepLoggedIn">Keep me logged in</label>
-          <button onClick={() => AuthenticateUser()} type="submit" id="loginButton">Log In</button>
-          <a href="/signup" class="login">Want to create a new account?</a>
+          <button onClick={() => AuthenticateUser()} type="submit" id="loginButton" data-testid="login-submit">Log In</button>
+          <a href="/signup" className="login" data-testid="link">Want to create a new account?</a>
         </div>
       </div>
     </div>

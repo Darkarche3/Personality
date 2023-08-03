@@ -8,6 +8,7 @@ import {
   updatePost,
   updateComment
 } from "../scripts/FirebaseUtilities";
+import { Alert } from "reactstrap";
 import { doc, serverTimestamp } from "firebase/firestore";
 
 export class EditForum extends Component {
@@ -15,7 +16,8 @@ export class EditForum extends Component {
     title: "",
     plainText: "",
     richText: "",
-    post_key: this.props.match.params.postkey
+    post_key: this.props.match.params.postkey,
+    errorMsg: ""
   };
   refEditor = React.createRef();
   editingPost = this.props.match.params.commentid === "1";
@@ -44,9 +46,24 @@ export class EditForum extends Component {
   };
 
   onSubmit = e => {
+    this.setState({ ...this.state, errorMsg: "" });
+
     // Get the rich text (I mean a string with HTML code) from the reference to TextEditor
     var plainText = this.refEditor.current.state.plainText;
     var richText = this.refEditor.current.state.valueHtml;
+
+    if (this.editingPost && !this.state.title) {
+      this.setState({ ...this.state, errorMsg: "Title cannot be empty." });
+      e.preventDefault();
+      return;
+    }
+
+    if (!plainText) {
+      this.setState({ ...this.state, errorMsg: "Text cannot be empty." });
+      e.preventDefault();
+      return;
+    }
+
     // Send to Firebase
     e.preventDefault();
     // Get document with all comments, push new comment
@@ -125,6 +142,7 @@ export class EditForum extends Component {
                   >
                     Cancel
                   </Link>
+                  {this.state.errorMsg && <Alert color="danger">{this.state.errorMsg}</Alert>}
                 </div>
               </form>
             </div>
