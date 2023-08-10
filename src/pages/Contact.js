@@ -4,12 +4,15 @@ import "../styles/Contact.css";
 import { db } from "../Firebase";
 import { ref, push, set } from "firebase/database";
 import { User } from "../scripts/FirebaseUtilities";
+import { Alert } from "reactstrap";
 
 // Contact Us Page
 export const Contact = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -37,17 +40,17 @@ export const Contact = () => {
 
     if ((User() == null && isEmptyOrSpaces(name)) || (User() == null && isEmptyOrSpaces(email)) || 
       isEmptyOrSpaces(message)) {
-      alert("You cannot leave any field empty.");
+      setErrorMsg("You cannot leave any field empty.");
       return false;
     }
 
     if (User() == null && !nameregex.test(name)) {
-      alert("The name should only contain letters!");
+      setErrorMsg("The name should only contain letters!");
       return false;
     }
 
     if (User() == null && !emailregex.test(email)) {
-      alert("Please enter a valid email.");
+      setErrorMsg("Please enter a valid email.");
       return false;
     }
 
@@ -55,6 +58,9 @@ export const Contact = () => {
   }
 
   const SendMessage = () => {
+    setSuccessMsg("");
+    setErrorMsg("");
+
     if (!Validation()) {
         return;
     }
@@ -68,10 +74,10 @@ export const Contact = () => {
       message: message
     })
     .then(() => {
-      alert("Message sent!");
+      setSuccessMsg("Message sent!");
     })
     .catch((error) => {
-      alert("Error: " + error);
+      setErrorMsg("Error: " + error);
     });
   };
 
@@ -79,13 +85,19 @@ export const Contact = () => {
     <div>
       <div className="contact-form">
         <h2>Contact</h2>
+        {successMsg && <Alert color="success">{successMsg}</Alert>}
+        {errorMsg && <Alert color="danger">{errorMsg}</Alert>}
         <div className="contact-container">
-          <label htmlFor="name">Name</label>
-          <input type="text" placeholder="Name" id="name"
-            value={name} onChange={(e) => handleInputChange(e)}/>
-          <label htmlFor="email">Email</label>
-          <input type="email" placeholder="youremail@gmail.com" id="email"
-            value={email} onChange={(e) => handleInputChange(e)}/>
+          {User() == null && 
+            <>
+              <label htmlFor="name">Name</label>
+              <input type="text" placeholder="Name" id="name"
+                value={name} onChange={(e) => handleInputChange(e)}/>
+              <label htmlFor="email">Email</label>
+              <input type="email" placeholder="youremail@gmail.com" id="email"
+                value={email} onChange={(e) => handleInputChange(e)}/>
+            </>
+          }
           <label htmlFor="message">Message</label>
           <textarea type="text" placeholder="What do you want to say to us?" id="message"
             value={message} onChange={(e) => handleInputChange(e)}/>

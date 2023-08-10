@@ -12,10 +12,10 @@ import { ForumList } from './pages/ForumList';
 import { Post } from './pages/Post';
 import { Create } from './pages/Create';
 import { Edit } from './components/Edit';
-import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
-import Student from './pages/Student';
-import Nus from './pages/Nus';
+import { Student } from './pages/Student';
 import { Ib } from './pages/Ib';
+import { Nus } from './pages/Nus';
+import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 
 export const App = () => {
   return (
@@ -25,6 +25,9 @@ export const App = () => {
       <Route path="/contact" element={<Contact />} />
       <Route path="/faq" element={<Faq />} />
       <Route path="/marketplace" element={<Marketplace />} />
+      <Route path="/student" element={<Student />} />
+      <Route path="/nus" element={<Nus />} />
+      <Route path="/ib" element={<Ib />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/login" element={<Login />} />
       <Route exact path="/forum" element={<ForumList />} />

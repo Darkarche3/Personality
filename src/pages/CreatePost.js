@@ -8,12 +8,14 @@ import {
   setPostReference
 } from "../scripts/FirebaseUtilities";
 import { serverTimestamp } from "firebase/firestore";
+import { Alert } from "reactstrap";
 import "../styles/CreatePost.css"
 
 export class CreatePost extends Component {
   state = {
     title: "",
-    post_key: ""
+    post_key: "",
+    errorMsg: ""
   };
   fire_post = getPostReference();
   refEditor = React.createRef();
@@ -21,7 +23,7 @@ export class CreatePost extends Component {
 
   componentDidMount() {
     //Create a reference to a new unsaved Post
-    this.setState({ ...this.stat, post_key: this.fire_post.id });
+    this.setState({ ...this.state, post_key: this.fire_post.id });
   }
   // Change title
   onChangeTitle = e => {
@@ -29,17 +31,19 @@ export class CreatePost extends Component {
   };
 
   onSubmit = e => {
+    this.setState({ ...this.state, errorMsg: "" });
+
     // Get the rich text (I mean a string with HTML code) from the reference to TextEditor
     var richText = this.refEditor.current.state.valueHtml;
     var plainText = this.refEditor.current.state.plainText;
     const { title } = this.state;
     if (title === "") {
-      alert("Title cannot be empty");
+      this.setState({ ...this.state, errorMsg: "Title cannot be empty." });
       e.preventDefault();
       return;
     }
     if (plainText === "" || richText === "") {
-      alert("Text cannot be empty");
+      this.setState({ ...this.state, errorMsg: "Text cannot be empty." });
       e.preventDefault();
       return;
     }
@@ -111,6 +115,7 @@ export class CreatePost extends Component {
                   <Link to="/forum" className="inline">
                     Cancel
                   </Link>
+                  {this.state.errorMsg && <Alert color="danger">{this.state.errorMsg}</Alert>}
                 </div>
               </form>
             </div>

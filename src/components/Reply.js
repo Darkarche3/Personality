@@ -7,6 +7,7 @@ import {
   updatePost,
   pushComment
 } from "../scripts/FirebaseUtilities";
+import { Alert } from "reactstrap";
 import { serverTimestamp, doc } from "firebase/firestore";
 
 class Reply extends Component {
@@ -15,7 +16,8 @@ class Reply extends Component {
     post_key: "",
     comment_key: "",
     richText: "",
-    isLoading: false
+    isLoading: false,
+    errorMsg: ""
   };
   fire_comment = doc(fire_comments, this.props.post_key);
   refEditor = React.createRef();
@@ -35,12 +37,14 @@ class Reply extends Component {
   }
 
   onSubmit = e => {
+    this.setState({ ...this.state, errorMsg: "" });
+
     e.preventDefault();
     const { comment_key } = this.state;
     var richText = this.refEditor.current.state.valueHtml;
     var plainText = this.refEditor.current.state.plainText;
     if (plainText === "" || richText === "") {
-      alert("Text cannot be empty");
+      this.setState({ ...this.state, errorMsg: "Text cannot be empty" });
       e.preventDefault();
       return;
     }
@@ -97,6 +101,7 @@ class Reply extends Component {
               >
                 Cancel
               </button>
+              {this.state.errorMsg && <Alert color="danger">{this.state.errorMsg}</Alert>}
             </div>
           </form>
         </div>
