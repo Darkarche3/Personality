@@ -18,14 +18,6 @@ export const Marketplace = () => {
           <h2 className="article">
             Marketplace
           </h2>
-          <div>
-            <select ref={selectRef}>
-              <option value="/student">Student</option>
-              <option value="/nus">NUS</option>
-              <option value="/ib">International Business</option>
-            </select>
-            <button className="button" onClick={handleButtonClick}>Go</button>
-          </div>
           <div className="outermost">
             <div className="outer">
               <div className="imgblock">
